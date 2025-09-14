@@ -1,0 +1,46 @@
+name: Publish (TestPyPI)
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version to publish on TestPyPI (e.g., 0.2.0a1)"
+        required: true
+        type: string
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    environment:
+      name: testpypi
+      url: https://pypi.org/p/static-fire-toolkit
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Bump version (optional)
+        if: ${{ inputs.version != '' }}
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import tomllib, tomli_w
+          data = tomllib.loads(Path("pyproject.toml").read_text())
+          data["project"]["version"] = "${{ inputs.version }}"
+          Path("pyproject.toml").write_text(tomli_w.dumps(data))
+          print("Set version to", "${{ inputs.version }}")
+          PY
+
+      - name: Build
+        run: |
+          python3 -m pip install --upgrade pip build tomli_w
+          python3 -m build
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
