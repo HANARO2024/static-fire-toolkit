@@ -46,7 +46,9 @@ jobs:
         uses: astral-sh/ruff-action@v3
 
       - name: Run tests
-        run: pytest -q
+        run: |
+          pip install pytest
+          pytest -q
 
   ci:
     name: ci
