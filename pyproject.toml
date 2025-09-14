@@ -1,0 +1,97 @@
+[build-system]
+requires = ["setuptools>=80", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "static-fire-toolkit"
+version = "0.1.0"
+description = "Static-fire test data processing toolkit"
+readme = "README.md"
+requires-python = ">=3.9"
+
+authors = [
+  { name = "SNU Rocket Team HANARO", email = "hanarodrive@gmail.com" }
+]
+maintainers = [
+  { name = "Yunseo Kim", email = "yunseo@snu.ac.kr" }
+]
+
+license = { text = "MIT" }
+
+keywords = ["rocket", "rocketry", "static-fire", "thrust", "pressure", "data-processing", "hanaro", "snu"]
+
+classifiers = [
+  "Environment :: Console",
+  "Intended Audience :: Science/Research",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Scientific/Engineering",
+  "Topic :: Scientific/Engineering :: Information Analysis",
+  "Topic :: Scientific/Engineering :: Physics",
+  "Topic :: Scientific/Engineering :: Visualization",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+dependencies = [
+    "numpy>=2.0",
+    "pandas>=2.0",
+    "scipy>=1.10",
+    "matplotlib>=3.7",
+]
+
+[project.scripts]
+sft = "static_fire_toolkit.core:hello"
+
+[project.urls]
+Homepage = "https://github.com/snu-hanaro/static-fire-toolkit"
+Source = "https://github.com/snu-hanaro/static-fire-toolkit"
+Changelog = "https://github.com/snu-hanaro/static-fire-toolkit/docs/CHANGELOG.md"
+Issues = "https://github.com/snu-hanaro/static-fire-toolkit/issues"
+"Release Notes" = "https://github.com/snu-hanaro/static-fire-toolkit/releases"
+"About HANARO" = "https://hanaro.snu.ac.kr/"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+include = ["static_fire_toolkit*"]
+
+[tool.ruff]
+target-version = "py39"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E1", "E2", "E4", "E7", "E9", "F", "W", "UP", "B", "D"]
+ignore = ["D100", "D104", "D107"]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.format]
+quote-style = "double"  # Like Black, use double quotes for strings.
+indent-style = "space"  # Like Black, indent with spaces, rather than tabs.
+skip-magic-trailing-comma = false  # Like Black, respect magic trailing commas.
+line-ending = "auto"  # Like Black, automatically detect the appropriate line ending.
+
+[tool.pytest.ini_options]
+addopts = "-q --color=yes"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["src"]
+omit = ["*/__init__.py"]
+
+[tool.coverage.report]
+skip_empty = true
+show_missing = true
+precision = 2
