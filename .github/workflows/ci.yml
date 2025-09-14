@@ -43,9 +43,7 @@ jobs:
           # pip install -c constraints-min.txt -e .[plot]
 
       - name: Lint
-        run: |
-          ruff check .
-          ruff format .
+        uses: astral-sh/ruff-action@v3
 
       - name: Run tests
         run: pytest -q
