@@ -1,0 +1,5 @@
+# Oldest-supported dependency set for CI "min" job
+numpy==2.0.*
+pandas==2.0.*
+scipy==1.10.*
+matplotlib==3.7.*
