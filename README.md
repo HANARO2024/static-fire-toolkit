@@ -234,7 +234,7 @@ Please use Issues/PRs with templates. Recommended:
 
 ## Authors & Maintainers
 - Authors: Seoul National University Rocket Team HANARO
-- Main Maintainer: @yunseo-kim
+- Main Maintainer: [@yunseo-kim](https://github.com/yunseo-kim)
 
 ## License
 
