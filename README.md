@@ -14,8 +14,6 @@ While the library can later be imported in Python, the **initial releases focus 
 - **Burn rate estimation** — regression-based analysis for solid propellants  
 - **Visualization** — generate thrust/pressure plots for reports and documentation  
 
----
-
 ## Installation
 
 From PyPI:
@@ -160,6 +158,7 @@ Datetime;Battery Level (%);5600 Pressure (Bar);5600 Temperature (°C)
 #### Output CSV schema
 
 | time [s] | pressure [bar] |
+| :--- | :--- |
 | 0.00 | 1.447… |
 | 0.01 | 1.500… |
 | 0.02 | 1.560… |
@@ -235,7 +234,7 @@ Please use Issues/PRs with templates. Recommended:
 
 ## Authors & Maintainers
 - Authors: Seoul National University Rocket Team HANARO
-- Main Maintainer: [Yunseo Kim](@yunseo-kim)
+- Main Maintainer: @yunseo-kim
 
 ## License
 
