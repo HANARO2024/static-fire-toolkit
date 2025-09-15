@@ -39,13 +39,17 @@ class BurnRateAnalyzer:
         """
         # Define file paths
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-        self.output_data_dir = os.path.join(self._BASE_DIR, "burnrate")
-        self.output_graph_dir = os.path.join(self._BASE_DIR, "burnrate_graph")
+        # Use execution root for all I/O (logs/results)
+        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        self.output_data_dir = os.path.join(self._EXEC_ROOT, "results", "burnrate")
+        self.output_graph_dir = os.path.join(
+            self._EXEC_ROOT, "results", "burnrate_graph"
+        )
 
         # Set up logging
         self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-        log_dir = os.path.join(self._BASE_DIR, "logs")
+        log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-burnrate_analysis.log")
 
@@ -623,9 +627,9 @@ class BurnRateAnalyzer:
 
 
 if __name__ == "__main__":
-    # Read config.xlsx
-    base_dir = os.path.dirname(__file__)
-    config_path = os.path.join(os.path.dirname(base_dir), "config.xlsx")
+    # Read config.xlsx from execution root
+    EXEC_ROOT = os.path.abspath(os.getcwd())
+    config_path = os.path.join(EXEC_ROOT, "config.xlsx")
     if not os.path.exists(config_path):
         print(f"Configuration file not found: {config_path}")
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -663,7 +667,7 @@ if __name__ == "__main__":
     print(f"Loaded configuration for experiment: {expt_file_name}")
 
     # Determine the file to process using the configuration file
-    pressure_data_dir = os.path.join(os.path.dirname(base_dir), "pressure_post_process")
+    pressure_data_dir = os.path.join(EXEC_ROOT, "results", "pressure")
     filename_csv = expt_file_name + "_pressure.csv"
     filename_txt = expt_file_name + "_pressure.txt"
 

@@ -85,7 +85,9 @@ class ThrustPostProcess:
         # Set up logging
         self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-        log_dir = os.path.join(self._BASE_DIR, "logs")
+        # Use execution root for all I/O (logs/results)
+        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-thrust_processing.log")
 
@@ -628,7 +630,7 @@ class ThrustPostProcess:
             )
             ax.grid(True)
             ax.tick_params(axis="both", which="major", labelsize=15)
-            output_dir = os.path.join("..", "thrust_graph")
+            output_dir = os.path.join(self._EXEC_ROOT, "results", "thrust_graph")
             os.makedirs(output_dir, exist_ok=True)
             output_path = os.path.join(output_dir, f"{self._file_name}_thrust.png")
             plt.savefig(output_path, bbox_inches=None, pad_inches=0, dpi=500)
@@ -645,9 +647,7 @@ class ThrustPostProcess:
         """Save processed thrust data to a CSV file."""
         self._logger.info("5. Saving processed thrust data.")
         try:
-            output_dir = os.path.join(
-                os.path.dirname(self._BASE_DIR), "thrust_post_process"
-            )
+            output_dir = os.path.join(self._EXEC_ROOT, "results", "thrust")
             os.makedirs(output_dir, exist_ok=True)
             output_file = os.path.join(output_dir, f"{self._file_name}_thrust.csv")
             # self._data_shifted.to_csv('./../thrust_post_process/'+self._file_name+ '_thrust.txt', sep = ' ', index=False)
@@ -670,9 +670,9 @@ class ThrustPostProcess:
 
 
 if __name__ == "__main__":
-    # Read config.xlsx
-    base_dir = os.path.dirname(__file__)
-    config_path = os.path.join(os.path.dirname(base_dir), "config.xlsx")
+    # Read config.xlsx from execution root
+    EXEC_ROOT = os.path.abspath(os.getcwd())
+    config_path = os.path.join(EXEC_ROOT, "config.xlsx")
     if not os.path.exists(config_path):
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
@@ -685,7 +685,7 @@ if __name__ == "__main__":
     print(f"Loaded configuration for experiment: {expt_file_name}")
 
     # 파일 경로 설정
-    raw_data_path = os.path.join(os.path.dirname(base_dir), "_thrust_raw/")
+    raw_data_path = os.path.join(EXEC_ROOT, "data", "_thrust_raw")
     csv_path = os.path.join(raw_data_path, f"{expt_file_name}_thrust_raw.csv")
     txt_path = os.path.join(raw_data_path, f"{expt_file_name}_thrust_raw.txt")
 
