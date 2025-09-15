@@ -69,7 +69,9 @@ class PressurePostProcess:
         # Set up logging
         self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
-        log_dir = os.path.join(self._BASE_DIR, "logs")
+        # Use execution root for all I/O (logs/results)
+        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-pressure_processing.log")
 
@@ -493,7 +495,8 @@ class PressurePostProcess:
 
             # Save and display
             save_path = os.path.join(
-                os.path.dirname(self._BASE_DIR),
+                self._EXEC_ROOT,
+                "results",
                 "pressure_graph",
                 f"{self._file_name}_pressure.png",
             )
@@ -514,9 +517,7 @@ class PressurePostProcess:
         """Save processed pressure data to CSV file."""
         self._logger.info("5. Saving processed pressure data")
         try:
-            save_dir = os.path.join(
-                os.path.dirname(self._BASE_DIR), "pressure_post_process"
-            )
+            save_dir = os.path.join(self._EXEC_ROOT, "results", "pressure")
             os.makedirs(save_dir, exist_ok=True)
             save_path = os.path.join(save_dir, f"{self._file_name}_pressure.csv")
 
@@ -540,9 +541,9 @@ class PressurePostProcess:
 
 
 if __name__ == "__main__":
-    # Read config.xlsx
-    base_dir = os.path.dirname(__file__)
-    config_path = os.path.join(os.path.dirname(base_dir), "config.xlsx")
+    # Read config.xlsx from execution root
+    EXEC_ROOT = os.path.abspath(os.getcwd())
+    config_path = os.path.join(EXEC_ROOT, "config.xlsx")
     if not os.path.exists(config_path):
         print(f"Configuration file not found: {config_path}")
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -553,8 +554,8 @@ if __name__ == "__main__":
     print(f"Loaded configuration for experiment: {expt_file_name}")
 
     # Set up file paths
-    thrust_dir = os.path.join(os.path.dirname(base_dir), "thrust_post_process")
-    pressure_raw_dir = os.path.join(os.path.dirname(base_dir), "_pressure_raw")
+    thrust_dir = os.path.join(EXEC_ROOT, "results", "thrust")
+    pressure_raw_dir = os.path.join(EXEC_ROOT, "data", "_pressure_raw")
 
     # Define file paths
     thrust_csv_path = os.path.join(thrust_dir, f"{expt_file_name}_thrust.csv")
