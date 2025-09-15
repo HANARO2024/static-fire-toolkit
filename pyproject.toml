@@ -48,7 +48,7 @@ dependencies = [
 ]
 
 [project.scripts]
-sft = "static_fire_toolkit.core:hello"
+sft = "static_fire_toolkit.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/snu-hanaro/static-fire-toolkit"
