@@ -1,0 +1,52 @@
+#### HANARO Standard Stylesheet
+## HANARO에서 matplotlib을 이용한 데이터 시각화 시 공통적으로 활용하는 기본 양식입니다.
+## 시각화 코드 작성 시 직접 세부적으로 지정해야 하는 속성값의 개수를 줄여 코드 작성 효율성 및 시각화 양식의 통일성을 제고합니다.
+## 코드가 위치한 디렉터리에 본 양식 파일을 복사하여 넣고, 코드의 첫 부분에 다음과 같이 내용을 추가하여 사용하실 수 있습니다.
+##
+## import matplotlib.pyplot as plt
+## plt.style.use('./hanaro_standard_stylesheet.mplstyle')
+##
+#### MATPLOTLIBRC FORMAT
+
+# * LINES
+lines.linewidth: 2.5
+
+# * FONT
+font.family: sans-serif
+font.sans-serif: Arial, Helvetica  # 최우선적으로 Arial 사용, 흔치 않은 경우(구형 mac)지만 시스템에 Arial이 없을 경우 백업으로 Helvetica 사용 시도
+font.size: 20.0     # label, tick, legend, title을 제외한 부분들(annotate, text, etc.)의 기본 글자 크기
+
+# * LaTeX
+#text.usetex: False
+
+# * AXES
+axes.grid:          True    # display grid or not
+axes.grid.axis:     both    # which axis the grid should apply to
+axes.grid.which:    major   # grid lines at {major, minor, both} ticks
+axes.titlelocation: center  # alignment of the title: {left, right, center}
+#axes.titlesize:    25.0    # font size of the axes title
+#axes.titleweight:  bold    # font weight of title
+axes.labelsize:     20.0    # font size of the x and y labels
+
+# * TICKS
+xtick.labelsize:    15.0    # font size of the tick labels
+ytick.labelsize:    15.0    # font size of the tick labels
+
+# * LEGEND
+legend.fontsize:    20.0
+
+# * FIGURE
+# See https://matplotlib.org/stable/api/figure_api.html#matplotlib.figure.Figure
+figure.titlesize:   25.0      # size of the figure title (``Figure.suptitle()``)
+figure.titleweight: bold      # weight of the figure title
+figure.figsize:     16, 9     # figure size in inches
+# figure.dpi:         500
+
+# * SCATTER PLOTS
+#scatter.marker: o         # The default marker type for scatter plots.
+#scatter.edgecolors: face  # The default edge colors for scatter plots.
+
+# * SAVING FIGURES
+savefig.dpi:       500         # figure dots per inch or 'figure'
+savefig.format:    png         # {png, ps, pdf, svg}
+savefig.pad_inches:  0.0       # padding to be used, when bbox is set to 'tight'
