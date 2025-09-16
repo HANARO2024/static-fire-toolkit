@@ -255,7 +255,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_pressure = sub.add_parser("pressure", help="Run pressure post-processing")
     p_pressure.add_argument(
         "--expt",
-        help="Experiment base name (requires thrust step be completed)",
+        help="Experiment base name (e.g., KNSB_250220, requires thrust step be completed)",
     )
     p_pressure.set_defaults(func=cmd_pressure)
 
@@ -263,7 +263,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_burnrate = sub.add_parser("burnrate", help="Run burnrate analysis")
     p_burnrate.add_argument(
         "--expt",
-        help="Experiment base name (requires pressure step be completed)",
+        help="Experiment base name (e.g., KNSB_250220, requires pressure step be completed)",
     )
     p_burnrate.set_defaults(func=cmd_burnrate)
 
@@ -273,7 +273,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     p_proc.add_argument(
         "--expt",
-        help="Experiment base name to process end-to-end",
+        help="Experiment base name to process end-to-end (e.g., KNSB_250220)",
     )
     p_proc.set_defaults(func=cmd_process)
 
