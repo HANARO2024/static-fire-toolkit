@@ -32,6 +32,7 @@ import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from static_fire_toolkit.style import apply_default_style
 from scipy.interpolate import PchipInterpolator
 from scipy.signal import find_peaks, peak_widths
 from scipy.integrate import simpson
@@ -418,6 +419,8 @@ class PressurePostProcess:
     # Step 4
     def _pressure_plot(self) -> None:
         """Plot the shifted pressure data with annotations and save the plot as an image file."""
+        # Ensure default style is applied for consistency
+        apply_default_style()
         self._logger.info("4. Plotting pressure data.")
         try:
             # Calculate key metrics
