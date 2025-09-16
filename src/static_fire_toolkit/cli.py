@@ -11,6 +11,11 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import numpy as np
+import matplotlib
+import scipy
+import sys
+import platform
 
 from static_fire_toolkit.post_process.thrust_post_processing import (
     ThrustPostProcess,
@@ -19,6 +24,7 @@ from static_fire_toolkit.post_process.pressure_post_processing import (
     PressurePostProcess,
 )
 from static_fire_toolkit.burnrate_calc.analyze_burnrate import BurnRateAnalyzer
+from static_fire_toolkit import __version__
 
 
 def _load_config(execution_root: Path, expt_name: str | None) -> dict[str, Any]:
@@ -202,11 +208,34 @@ def cmd_process(args: argparse.Namespace) -> None:
     analyzer.run()
 
 
+def cmd_info(args: argparse.Namespace) -> None:
+    """Show environment and package information useful for bug reports."""
+    exec_root = Path(args.root or os.getcwd()).resolve()
+    config_path = exec_root / "config.xlsx"
+
+    print("Static-Fire Toolkit")
+    print(f"  version        : {__version__}")
+    print(f"  python         : {sys.version.split()[0]}")
+    print(f"  platform       : {platform.platform()}")
+    print(f"  numpy          : {np.__version__}")
+    print(f"  pandas         : {pd.__version__}")
+    print(f"  scipy          : {scipy.__version__}")
+    print(f"  matplotlib     : {matplotlib.__version__}")
+    print(f"  exec_root      : {exec_root}")
+    print(f"  config.xlsx    : {'present' if config_path.exists() else 'missing'}")
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Create an argparse parser for the CLI."""
     parser = argparse.ArgumentParser(
         prog="sft",
         description="Static-Fire Toolkit CLI",
+    )
+    parser.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="Show CLI and package version",
     )
     parser.add_argument(
         "--root",
@@ -247,6 +276,10 @@ def build_parser() -> argparse.ArgumentParser:
         help="Experiment base name to process end-to-end",
     )
     p_proc.set_defaults(func=cmd_process)
+
+    # sft info
+    p_info = sub.add_parser("info", help="Show environment and package information")
+    p_info.set_defaults(func=cmd_info)
 
     return parser
 
