@@ -31,6 +31,7 @@ import sys
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from static_fire_toolkit.style import apply_default_style
 from scipy.interpolate import PchipInterpolator
 from scipy.signal import find_peaks, peak_widths, butter, lfilter
 from scipy.ndimage import gaussian_filter1d
@@ -568,6 +569,8 @@ class ThrustPostProcess:
     # Step 4
     def _thrust_plot(self) -> None:
         """Plot the shifted thrust data with annotations and save the plot to a file."""
+        # Ensure default style is applied for consistency
+        apply_default_style()
         self._logger.info("4. Plotting thrust data.")
         try:
             start_index, burn_time_index, action_time_index = self._find_time()
