@@ -10,6 +10,8 @@ HANARO, Seoul National University Rocket Team
 - Added data validation and warning messages
 """
 
+from __future__ import annotations
+
 import os
 import logging
 import pandas as pd
@@ -171,23 +173,25 @@ class BurnRateAnalyzer:
             raise
 
     @staticmethod
-    def saint_roberts_law(P: float | np.array, a: float, n: float) -> float | np.array:
+    def saint_roberts_law(
+        P: float | np.ndarray, a: float, n: float
+    ) -> float | np.ndarray:
         """Saint Robert's Law (Vieille's Law): r = a * P^n.
 
         Parameters:
-            P (float or np.array): Pressure in MPa.
+            P (float or np.ndarray): Pressure in MPa.
             a (float): Coefficient (experimentally determined).
             n (float): Exponent (experimentally determined).
 
         Returns:
-            float or np.array: Burn rate in mm/s.
+            float or np.ndarray: Burn rate in mm/s.
         """
         return a * np.power(P, n)
 
     # Step 2: Calculate burnrate
     def calc_burnrate(
         self, pressure_data: pd.DataFrame
-    ) -> tuple[np.array, np.array, float, float]:
+    ) -> tuple[np.ndarray, np.ndarray, float | None, float | None]:
         """Calculate burnrate using RK4 and fit an ideal burnrate curve.
 
         The ideal curve is computed using Saint Robert's Law.
@@ -197,8 +201,8 @@ class BurnRateAnalyzer:
 
         Returns:
             tuple: (burnrate, burnrate_ideal, a_fit, n_fit)
-                burnrate (np.array): Calculated burnrate at each time step (mm/s).
-                burnrate_ideal (np.array): Ideal burnrate from curve fitting (mm/s).
+                burnrate (np.ndarray): Calculated burnrate at each time step (mm/s).
+                burnrate_ideal (np.ndarray): Ideal burnrate from curve fitting (mm/s).
                 a_fit (float): Fitted coefficient a.
                 n_fit (float): Fitted exponent n.
         """
