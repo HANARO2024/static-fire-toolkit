@@ -21,6 +21,22 @@ jobs:
         with:
           python-version: "3.13"
       
+      # Ensure the tag commit belongs to 'main' (avoid releasing from non-main)
+      - name: Verify tag points to main
+        shell: bash
+        run: |
+          # Fetch main to ensure ancestry check is accurate
+          git fetch --no-tags origin main
+          TAG_REF="${GITHUB_REF#refs/tags/}"     # e.g., v1.0.0
+          TAG_SHA="$(git rev-list -n 1 "$TAG_REF")"
+          # Check that TAG_SHA is reachable from origin/main
+          if git merge-base --is-ancestor "$TAG_SHA" origin/main; then
+            echo "OK: $TAG_REF ($TAG_SHA) is contained in origin/main"
+          else
+            echo "ERROR: $TAG_REF ($TAG_SHA) is not on main. Refusing to publish." >&2
+            exit 1
+          fi
+      
       - name: Build
         run: |
           python3 -m pip install --upgrade pip build
