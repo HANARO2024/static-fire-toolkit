@@ -71,6 +71,7 @@ class ThrustPostProcess:
         file_name: str,
         input_voltage: float,
         resistance: float,
+        execution_root: str | None = None,
     ) -> None:
         """Initialize the ThrustPostProcess object with raw data and configuration parameters.
 
@@ -79,6 +80,8 @@ class ThrustPostProcess:
             file_name (str): File name identifier.
             input_voltage (float): Input voltage used during measurement.
             resistance (float): Resistance value used during measurement.
+            execution_root (str | None): Base directory for logs/ and results/*.
+                If None, defaults to current working directory.
 
         Raises:
             ValueError: If data_raw is not a pandas DataFrame, is empty, or has insufficient columns.
@@ -87,7 +90,7 @@ class ThrustPostProcess:
         self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
         # Use execution root for all I/O (logs/results)
-        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        self._EXEC_ROOT = os.path.abspath(execution_root or os.getcwd())
         log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-thrust_processing.log")

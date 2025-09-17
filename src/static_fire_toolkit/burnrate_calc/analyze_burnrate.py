@@ -30,7 +30,11 @@ class BurnRateAnalyzer:
     """A class for analyzing the burnrate of a solid rocket motor fuel based on pressure data."""
 
     def __init__(
-        self, pressure_data: pd.DataFrame, grain: dict, file_name: str
+        self,
+        pressure_data: pd.DataFrame,
+        grain: dict,
+        file_name: str,
+        execution_root: str | None = None,
     ) -> None:
         """Initialize the analyzer with pressure data, grain parameters, and file metadata.
 
@@ -42,7 +46,7 @@ class BurnRateAnalyzer:
         # Define file paths
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
         # Use execution root for all I/O (logs/results)
-        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        self._EXEC_ROOT = os.path.abspath(execution_root or os.getcwd())
         self.output_data_dir = os.path.join(self._EXEC_ROOT, "results", "burnrate")
         self.output_graph_dir = os.path.join(
             self._EXEC_ROOT, "results", "burnrate_graph"
