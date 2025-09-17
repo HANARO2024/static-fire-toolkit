@@ -55,7 +55,11 @@ class PressurePostProcess:
     """
 
     def __init__(
-        self, pressure_data_raw: pd.DataFrame, thrust_data: pd.DataFrame, file_name: str
+        self,
+        pressure_data_raw: pd.DataFrame,
+        thrust_data: pd.DataFrame,
+        file_name: str,
+        execution_root: str | None = None,
     ) -> None:
         """Initialize the PressurePostProcess object with raw pressure data and configuration parameters.
 
@@ -63,6 +67,8 @@ class PressurePostProcess:
             pressure_data_raw (pd.DataFrame): Raw data containing time and pressure measurements
             thrust_data (pd.DataFrame): Processed thrust data for synchronization
             file_name (str): File name identifier for logging and output
+            execution_root (str | None): Base directory for logs/ and results/*.
+                If None, defaults to current working directory.
 
         Raises:
             ValueError: If input data is invalid or missing required columns
@@ -71,7 +77,7 @@ class PressurePostProcess:
         self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
         # Use execution root for all I/O (logs/results)
-        self._EXEC_ROOT = os.path.abspath(os.getcwd())
+        self._EXEC_ROOT = os.path.abspath(execution_root or os.getcwd())
         log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-pressure_processing.log")

@@ -127,6 +127,7 @@ def cmd_thrust(args: argparse.Namespace) -> None:
         file_name=cfg["expt_file_name"],
         input_voltage=cfg["expt_input_voltage"],
         resistance=cfg["expt_resistance"],
+        execution_root=str(exec_root),
     )
     _ = proc.run()
 
@@ -157,6 +158,7 @@ def cmd_pressure(args: argparse.Namespace) -> None:
         pressure_data_raw=pressure_raw,
         thrust_data=thrust_data,
         file_name=cfg["expt_file_name"],
+        execution_root=str(exec_root),
     )
     _ = proc.run()
 
@@ -184,6 +186,7 @@ def cmd_burnrate(args: argparse.Namespace) -> None:
         pressure_data=pressure_data,
         grain=cfg["grain"],
         file_name=cfg["expt_file_name"],
+        execution_root=str(exec_root),
     )
     analyzer.run()
 
@@ -203,6 +206,7 @@ def cmd_process(args: argparse.Namespace) -> None:
         file_name=cfg["expt_file_name"],
         input_voltage=cfg["expt_input_voltage"],
         resistance=cfg["expt_resistance"],
+        execution_root=str(exec_root),
     )
     thrust_df = thrust_proc.run()
 
@@ -216,6 +220,7 @@ def cmd_process(args: argparse.Namespace) -> None:
         pressure_data_raw=pressure_raw,
         thrust_data=thrust_df,
         file_name=cfg["expt_file_name"],
+        execution_root=str(exec_root),
     )
     pressure_df = pressure_proc.run()
 
@@ -226,6 +231,7 @@ def cmd_process(args: argparse.Namespace) -> None:
         pressure_data=pressure_df,
         grain=cfg["grain"],
         file_name=cfg["expt_file_name"],
+        execution_root=str(exec_root),
     )
     analyzer.run()
 
@@ -235,7 +241,12 @@ def cmd_info(args: argparse.Namespace) -> None:
     exec_root = Path(args.root or os.getcwd()).resolve()
     config_path = exec_root / "config.xlsx"
 
-    print("Static-Fire Toolkit")
+    print("\nStatic-Fire Toolkit\n")
+    print("(c) 2025 SNU Rocket Team HANARO. Licensed under the MIT License.\n")
+    print("================================================================")
+    print(f"  exec_root      : {exec_root}")
+    print(f"  config.xlsx    : {'present' if config_path.exists() else 'missing'}")
+    print("================================================================")
     print(f"  version        : {__version__}")
     print(f"  python         : {sys.version.split()[0]}")
     print(f"  platform       : {platform.platform()}")
@@ -249,8 +260,7 @@ def cmd_info(args: argparse.Namespace) -> None:
     print(f"  pandas         : {pd.__version__}")
     print(f"  scipy          : {scipy.__version__}")
     print(f"  matplotlib     : {matplotlib.__version__}")
-    print(f"  exec_root      : {exec_root}")
-    print(f"  config.xlsx    : {'present' if config_path.exists() else 'missing'}")
+    print("================================================================")
 
 
 def build_parser() -> argparse.ArgumentParser:
