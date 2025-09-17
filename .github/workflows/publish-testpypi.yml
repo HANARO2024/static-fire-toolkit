@@ -17,6 +17,7 @@ jobs:
     permissions:
       id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
       contents: read
+    
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -26,6 +27,7 @@ jobs:
       - name: Bump version (optional)
         if: ${{ inputs.version != '' }}
         run: |
+          python3 -m pip install --upgrade pip tomli-w
           python - <<'PY'
           from pathlib import Path
           import tomllib, tomli_w
@@ -37,7 +39,7 @@ jobs:
 
       - name: Build
         run: |
-          python3 -m pip install --upgrade pip build tomli_w
+          python3 -m pip install --upgrade build
           python3 -m build
 
       - name: Publish to TestPyPI
