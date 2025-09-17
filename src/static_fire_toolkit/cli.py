@@ -8,23 +8,15 @@ from __future__ import annotations
 import argparse
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, TYPE_CHECKING
 
-import pandas as pd
-import numpy as np
-import matplotlib
-import scipy
 import sys
 import platform
 
-from static_fire_toolkit.post_process.thrust_post_processing import (
-    ThrustPostProcess,
-)
-from static_fire_toolkit.post_process.pressure_post_processing import (
-    PressurePostProcess,
-)
-from static_fire_toolkit.burnrate_calc.analyze_burnrate import BurnRateAnalyzer
 from static_fire_toolkit import __version__
+
+if TYPE_CHECKING:  # Only for type checkers; avoids importing pandas at runtime here
+    from pandas import DataFrame
 
 
 def _load_config(execution_root: Path, expt_name: str | None) -> dict[str, Any]:
@@ -37,6 +29,8 @@ def _load_config(execution_root: Path, expt_name: str | None) -> dict[str, Any]:
     Returns:
         dict: Configuration mapping including expt_file_name, thrust params, and grain.
     """
+    import pandas as pd
+
     config_path = execution_root / "config.xlsx"
     if not config_path.exists():
         raise FileNotFoundError(f"Configuration file not found: {config_path}")
@@ -81,7 +75,7 @@ def _load_config(execution_root: Path, expt_name: str | None) -> dict[str, Any]:
     }
 
 
-def _read_thrust_raw(execution_root: Path, expt_file_name: str) -> pd.DataFrame:
+def _read_thrust_raw(execution_root: Path, expt_file_name: str) -> DataFrame:
     """Read raw thrust data (csv or txt) for the given experiment name."""
     raw_dir = execution_root / "data" / "_thrust_raw"
     csv_path = raw_dir / f"{expt_file_name}_thrust_raw.csv"
@@ -94,10 +88,12 @@ def _read_thrust_raw(execution_root: Path, expt_file_name: str) -> pd.DataFrame:
         raise FileNotFoundError(
             f"No thrust data file found for {expt_file_name}: {csv_path} or {txt_path}"
         )
+    import pandas as pd
+
     return pd.read_csv(data_file, sep="[,\t]", header=None, engine="python")
 
 
-def _read_pressure_raw(execution_root: Path, expt_file_name: str) -> pd.DataFrame:
+def _read_pressure_raw(execution_root: Path, expt_file_name: str) -> DataFrame:
     """Read raw pressure data (csv expected with ';' delimiter)."""
     raw_dir = execution_root / "data" / "_pressure_raw"
     csv_path = raw_dir / f"{expt_file_name}_pressure_raw.csv"
@@ -112,6 +108,8 @@ def _read_pressure_raw(execution_root: Path, expt_file_name: str) -> pd.DataFram
         )
     # Pressure raw csv typically uses ';'
     sep = ";" if str(data_file).endswith(".csv") else ","
+    import pandas as pd
+
     return pd.read_csv(data_file, sep=sep, header=0)
 
 
@@ -119,6 +117,10 @@ def cmd_thrust(args: argparse.Namespace) -> None:
     """Run thrust post-processing for a single experiment."""
     exec_root = Path(args.root or os.getcwd()).resolve()
     cfg = _load_config(exec_root, args.expt)
+    from static_fire_toolkit.post_process.thrust_post_processing import (
+        ThrustPostProcess,
+    )
+
     thrust_raw = _read_thrust_raw(exec_root, cfg["expt_file_name"])
     proc = ThrustPostProcess(
         data_raw=thrust_raw,
@@ -133,6 +135,11 @@ def cmd_pressure(args: argparse.Namespace) -> None:
     """Run pressure post-processing for a single experiment."""
     exec_root = Path(args.root or os.getcwd()).resolve()
     cfg = _load_config(exec_root, args.expt)
+    import pandas as pd
+    from static_fire_toolkit.post_process.pressure_post_processing import (
+        PressurePostProcess,
+    )
+
     pressure_raw = _read_pressure_raw(exec_root, cfg["expt_file_name"])
 
     # Load processed thrust output generated earlier
@@ -143,6 +150,7 @@ def cmd_pressure(args: argparse.Namespace) -> None:
         raise FileNotFoundError(
             f"Processed thrust CSV not found (expected first): {thrust_csv}"
         )
+    # Local import to avoid importing pandas for lightweight commands
     thrust_data = pd.read_csv(thrust_csv)
 
     proc = PressurePostProcess(
@@ -165,7 +173,12 @@ def cmd_burnrate(args: argparse.Namespace) -> None:
         raise FileNotFoundError(
             f"Processed pressure CSV not found (expected after pressure step): {pressure_csv}"
         )
+    import pandas as pd
+
+    # Local import to avoid importing pandas for lightweight commands
     pressure_data = pd.read_csv(pressure_csv)
+
+    from static_fire_toolkit.burnrate_calc.analyze_burnrate import BurnRateAnalyzer
 
     analyzer = BurnRateAnalyzer(
         pressure_data=pressure_data,
@@ -179,6 +192,9 @@ def cmd_process(args: argparse.Namespace) -> None:
     """Run the end-to-end pipeline: thrust -> pressure -> burnrate."""
     exec_root = Path(args.root or os.getcwd()).resolve()
     cfg = _load_config(exec_root, args.expt)
+    from static_fire_toolkit.post_process.thrust_post_processing import (
+        ThrustPostProcess,
+    )
 
     # 1) Thrust
     thrust_raw = _read_thrust_raw(exec_root, cfg["expt_file_name"])
@@ -192,6 +208,10 @@ def cmd_process(args: argparse.Namespace) -> None:
 
     # 2) Pressure
     pressure_raw = _read_pressure_raw(exec_root, cfg["expt_file_name"])
+    from static_fire_toolkit.post_process.pressure_post_processing import (
+        PressurePostProcess,
+    )
+
     pressure_proc = PressurePostProcess(
         pressure_data_raw=pressure_raw,
         thrust_data=thrust_df,
@@ -200,6 +220,8 @@ def cmd_process(args: argparse.Namespace) -> None:
     pressure_df = pressure_proc.run()
 
     # 3) Burnrate
+    from static_fire_toolkit.burnrate_calc.analyze_burnrate import BurnRateAnalyzer
+
     analyzer = BurnRateAnalyzer(
         pressure_data=pressure_df,
         grain=cfg["grain"],
@@ -217,6 +239,12 @@ def cmd_info(args: argparse.Namespace) -> None:
     print(f"  version        : {__version__}")
     print(f"  python         : {sys.version.split()[0]}")
     print(f"  platform       : {platform.platform()}")
+    # Lazy import heavy libs only when info is requested
+    import numpy as np
+    import pandas as pd
+    import scipy
+    import matplotlib
+
     print(f"  numpy          : {np.__version__}")
     print(f"  pandas         : {pd.__version__}")
     print(f"  scipy          : {scipy.__version__}")
