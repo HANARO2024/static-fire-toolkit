@@ -14,6 +14,7 @@ import sys
 import platform
 
 from static_fire_toolkit import __version__
+from static_fire_toolkit.config_loader import load_global_config
 
 if TYPE_CHECKING:  # Only for type checkers; avoids importing pandas at runtime here
     from pandas import DataFrame
@@ -90,7 +91,10 @@ def _read_thrust_raw(execution_root: Path, expt_file_name: str) -> DataFrame:
         )
     import pandas as pd
 
-    return pd.read_csv(data_file, sep="[,\t]", header=None, engine="python")
+    cfg = load_global_config(execution_root)
+    sep = str(getattr(cfg, "thrust_sep", ","))
+    header = getattr(cfg, "thrust_header", 0)
+    return pd.read_csv(data_file, sep=sep, header=header, engine="python")
 
 
 def _read_pressure_raw(execution_root: Path, expt_file_name: str) -> DataFrame:
@@ -106,11 +110,12 @@ def _read_pressure_raw(execution_root: Path, expt_file_name: str) -> DataFrame:
         raise FileNotFoundError(
             f"No pressure data file found for {expt_file_name}: {csv_path} or {txt_path}"
         )
-    # Pressure raw csv typically uses ';'
-    sep = ";" if str(data_file).endswith(".csv") else ","
     import pandas as pd
 
-    return pd.read_csv(data_file, sep=sep, header=0)
+    cfg = load_global_config(execution_root)
+    sep = str(getattr(cfg, "pressure_sep", ","))
+    header = getattr(cfg, "pressure_header", 0)
+    return pd.read_csv(data_file, sep=sep, header=header, engine="python")
 
 
 def cmd_thrust(args: argparse.Namespace) -> None:

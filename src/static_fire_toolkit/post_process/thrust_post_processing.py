@@ -707,9 +707,12 @@ if __name__ == "__main__":
         print(error_msg)
         raise FileNotFoundError(error_msg)
 
-    thrust_data = pd.read_csv(
-        data_file, sep="[,\t]", header=None, engine="python"
-    )  # 기존 데이터 형식과도 호환되도록 구분자로 쉼표(,) 및 탭(\t) 사용
+    from static_fire_toolkit.config_loader import load_global_config
+
+    cfg = load_global_config()
+    thrust_sep = str(getattr(cfg, "thrust_sep", ","))
+    thrust_header = getattr(cfg, "thrust_header", 0)
+    thrust_data = pd.read_csv(data_file, sep=thrust_sep, header=thrust_header)
     print("Successfully loaded input data file.")
 
     process = ThrustPostProcess(
