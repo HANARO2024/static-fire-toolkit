@@ -605,8 +605,16 @@ if __name__ == "__main__":
         raise FileNotFoundError(error_msg)
 
     # Read and process data
-    pressure_data = pd.read_csv(pressure_data_file, sep=";", header=0)
-    thrust_data = pd.read_csv(thrust_data_file, sep="[, ]", header=0, engine="python")
+    from static_fire_toolkit.config_loader import load_global_config
+
+    cfg = load_global_config()
+    pressure_sep = str(getattr(cfg, "pressure_sep", ","))
+    pressure_header = getattr(cfg, "pressure_header", 0)
+    pressure_data = pd.read_csv(
+        pressure_data_file, sep=pressure_sep, header=pressure_header, engine="python"
+    )
+    # Processed thrust CSV is always saved with comma separator by toolkit
+    thrust_data = pd.read_csv(thrust_data_file)
     print("Successfully loaded input data files.")
 
     # Initialize processor and run processing steps

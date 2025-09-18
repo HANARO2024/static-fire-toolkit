@@ -24,16 +24,20 @@ from typing import Any
 class Config:
     """Runtime configuration values used by processing modules."""
 
-    rated_output: float = 2.0  # mV/V or sensor unit (example default)
-    rated_load: float = 100.0  # kg or sensor unit (example default)
-    g: float = 9.80665
-    frequency: float = 100.0  # Hz (Δt = 0.01 s)
+    rated_output: float = 3.0  # rated output of load cell, V
+    rated_load: float = 500.0  # rated load of load cell, kgf
+    g: float = 9.80665  # gravitational acceleration, m/s^2
+    frequency: float = 100.0  # Sampling rate, Hz (Δt = 0.01 s)
     cutoff_frequency: float = 10.0  # Hz for LPF
-    lowpass_order: int = 2
-    gaussian_weak_sigma: float = 2.0
-    gaussian_strong_sigma: float = 8.0
-    start_criteria: float = 0.15
-    end_criteria: float = 0.15
+    lowpass_order: int = 5  # order for lowpass filter
+    gaussian_weak_sigma: float = 2.0  # sigma for weak gaussian filter
+    gaussian_strong_sigma: float = 8.0  # sigma for strong gaussian filter
+    start_criteria: float = 0.15  # Criteria for the starting point of a meaningful interval in thrust data processing
+    end_criteria: float = 0.15  # Criteria for the ending point of a meaningful interval in thrust data processing
+    thrust_sep: str = ","  # separator for thrust data, character or Regex
+    thrust_header: int | None = 0  # header for thrust data (row number or None)
+    pressure_sep: str = ","  # separator for pressure data, character or Regex
+    pressure_header: int | None = 0  # header for pressure data (row number or None)
 
 
 def _read_attr(cfg: Any, name: str, default: Any) -> Any:
@@ -70,6 +74,10 @@ def _load_from_python(path: Path, base: Config) -> Config:
                 _read_attr(mod, "start_criteria", base.start_criteria)
             ),
             end_criteria=float(_read_attr(mod, "end_criteria", base.end_criteria)),
+            thrust_sep=str(_read_attr(mod, "thrust_sep", base.thrust_sep)),
+            thrust_header=_read_attr(mod, "thrust_header", base.thrust_header),
+            pressure_sep=str(_read_attr(mod, "pressure_sep", base.pressure_sep)),
+            pressure_header=_read_attr(mod, "pressure_header", base.pressure_header),
         )
     return base
 
