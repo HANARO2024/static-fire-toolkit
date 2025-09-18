@@ -1,7 +1,14 @@
+# ----------- Thrust Data Processing -----------
 thrust_sep = "[,\t]"  # separator for thrust data, character or Regex
 thrust_header = None  # header for thrust data (row number or None)
+thrust_time_col_idx = 0  # index of time column
+thrust_col_idx = 1  # index of thrust column
+# ---------- Pressure Data Processing ----------
 pressure_sep = ";"  # separator for pressure data, character or Regex
 pressure_header = 0  # header for pressure data (row number or None)
+pressure_time_col_idx = 0  # index of datetime column
+pressure_col_idx = 2  # index of pressure column
+# ------------ Global Configuration ------------
 g = 9.80665  # gravitational acceleration, m/s^2
 rated_load = 500  # rated load of load cell, kgf
 rated_output = 3  # rated output of load cell, V
