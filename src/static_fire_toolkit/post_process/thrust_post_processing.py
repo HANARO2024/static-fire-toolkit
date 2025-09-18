@@ -42,21 +42,6 @@ from static_fire_toolkit.config_loader import load_global_config
 # Add parent directory to Python path to import config (kept for backward compatibility of CLI entry)
 sys.path.append(os.path.dirname(__file__))
 
-# Load configuration parameters explicitly
-_CFG = load_global_config()
-rated_output = _CFG.rated_output
-rated_load = _CFG.rated_load
-g = _CFG.g
-frequency = _CFG.frequency
-cutoff_frequency = _CFG.cutoff_frequency
-lowpass_order = _CFG.lowpass_order
-gaussian_weak_sigma = _CFG.gaussian_weak_sigma
-gaussian_strong_sigma = _CFG.gaussian_strong_sigma
-start_criteria = _CFG.start_criteria
-end_criteria = _CFG.end_criteria
-thrust_time_col_idx = _CFG.thrust_time_col_idx
-thrust_col_idx = _CFG.thrust_col_idx
-
 
 class ThrustPostProcess:
     """End-to-end thrust post-processing pipeline.
@@ -88,11 +73,27 @@ class ThrustPostProcess:
         Raises:
             ValueError: If data_raw is not a pandas DataFrame, is empty, or has insufficient columns.
         """
-        # Set up logging
-        self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
         # Use execution root for all I/O (logs/results)
         self._EXEC_ROOT = os.path.abspath(execution_root or os.getcwd())
+
+        # Load configuration parameters explicitly
+        self._CFG = load_global_config(self._EXEC_ROOT)
+        self._rated_output = self._CFG.rated_output
+        self._rated_load = self._CFG.rated_load
+        self._g = 9.80665  # gravitational acceleration, m/s^2
+        self._frequency = self._CFG.frequency
+        self._cutoff_frequency = self._CFG.cutoff_frequency
+        self._lowpass_order = self._CFG.lowpass_order
+        self._gaussian_weak_sigma = self._CFG.gaussian_weak_sigma
+        self._gaussian_strong_sigma = self._CFG.gaussian_strong_sigma
+        self._start_criteria = self._CFG.start_criteria
+        self._end_criteria = self._CFG.end_criteria
+        self._thrust_time_col_idx = self._CFG.thrust_time_col_idx
+        self._thrust_col_idx = self._CFG.thrust_col_idx
+
+        # Set up logging
+        self._logger = logging.getLogger(__name__)
         log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-thrust_processing.log")
@@ -138,18 +139,20 @@ class ThrustPostProcess:
 
         # Select columns based on configuration indices
         if (
-            thrust_time_col_idx >= data_raw.shape[1]
-            or thrust_col_idx >= data_raw.shape[1]
+            self._thrust_time_col_idx >= data_raw.shape[1]
+            or self._thrust_col_idx >= data_raw.shape[1]
         ):
             self._logger.error(
                 "Configured thrust column indices are out of bounds: time_idx=%d, thrust_idx=%d, cols=%d",
-                thrust_time_col_idx,
-                thrust_col_idx,
+                self._thrust_time_col_idx,
+                self._thrust_col_idx,
                 data_raw.shape[1],
             )
             raise ValueError("Configured thrust column indices are out of bounds.")
 
-        self._data_raw = data_raw.iloc[:, [thrust_time_col_idx, thrust_col_idx]].copy()
+        self._data_raw = data_raw.iloc[
+            :, [self._thrust_time_col_idx, self._thrust_col_idx]
+        ].copy()
         self._data_raw.columns = ["time", "thrust"]
         self._file_name: str = file_name
         self._input_voltage: float = input_voltage
@@ -201,9 +204,9 @@ class ThrustPostProcess:
             data["thrust"] = (
                 data["thrust"]
                 * 1000
-                / (rated_output * self._input_voltage)
-                * rated_load
-                * g
+                / (self._rated_output * self._input_voltage)
+                * self._rated_load
+                * self._g
                 / (1 + 49.4 * 1000 / self._resistance)
             )
         except Exception as e:
@@ -239,7 +242,7 @@ class ThrustPostProcess:
         self._logger.info("   1-2. Estimating interval of thrust data.")
         try:
             # Apply strong Gaussian filtering for smoothing.
-            strong_filtered = self._gaussian_filter(data, gaussian_strong_sigma)
+            strong_filtered = self._gaussian_filter(data, self._gaussian_strong_sigma)
             thrust_max = strong_filtered["thrust"].max()
             peaks, _ = find_peaks(strong_filtered["thrust"], height=thrust_max)
             if len(peaks) == 0:
@@ -322,7 +325,7 @@ class ThrustPostProcess:
         # - 단, 계산 비용은 약간 더 커짐
 
         try:
-            time_interval = 1 / frequency
+            time_interval = 1 / self._frequency
             time_interpolated = np.arange(0, data["time"].max(), time_interval)
             pchip_interp = PchipInterpolator(data["time"], data["thrust"])
             thrust_interpolated = pchip_interp(time_interpolated)
@@ -352,8 +355,8 @@ class ThrustPostProcess:
         """
         self._logger.info("   1-4. Applying low-pass filter to thrust data.")
         try:
-            normal_cutoff = 2 * cutoff_frequency / frequency
-            b, a = butter(lowpass_order, normal_cutoff, btype="low", analog=False)
+            normal_cutoff = 2 * self._cutoff_frequency / self._frequency
+            b, a = butter(self._lowpass_order, normal_cutoff, btype="low", analog=False)
             thrust_filtered = lfilter(b, a, data["thrust"])
             data_lpf = pd.DataFrame({"time": data["time"], "thrust": thrust_filtered})
             self._logger.info("   1-4. Low-pass filtering complete.")
@@ -377,7 +380,7 @@ class ThrustPostProcess:
             )
             data_interpolated = self._interpolate(data_interval)
             data_filtered = self._low_pass_filter(data_interpolated)
-            self._data = self._gaussian_filter(data_filtered, gaussian_weak_sigma)
+            self._data = self._gaussian_filter(data_filtered, self._gaussian_weak_sigma)
             self._logger.info("1. Data preset process complete.")
         except Exception as e:
             self._logger.error("Error during data preset: %s", e, exc_info=True)
@@ -401,12 +404,15 @@ class ThrustPostProcess:
         start_index, end_index = max_index, min_index
         try:
             # Adjust start_index: move backward until the ratio is below the start_criteria.
-            while start_index > 0 and diff[start_index] / np.max(diff) > start_criteria:
+            while (
+                start_index > 0
+                and diff[start_index] / np.max(diff) > self._start_criteria
+            ):
                 start_index -= 1
             # Adjust end_index: move forward until the ratio is below the end_criteria.
             while (
                 end_index < len(diff) - 1
-                and diff[end_index] / np.min(diff) > end_criteria
+                and diff[end_index] / np.min(diff) > self._end_criteria
             ):
                 end_index += 1
         except Exception as e:
@@ -434,7 +440,7 @@ class ThrustPostProcess:
 
             # Compute the difference between consecutive thrust values.
             diff = np.diff(thrust_values)
-            diff_filtered = gaussian_filter1d(diff, gaussian_strong_sigma)
+            diff_filtered = gaussian_filter1d(diff, self._gaussian_strong_sigma)
             max_index = int(np.argmax(diff_filtered))
             min_index = int(np.argmin(diff_filtered))
             self._logger.info(
@@ -725,7 +731,7 @@ if __name__ == "__main__":
 
     from static_fire_toolkit.config_loader import load_global_config
 
-    cfg = load_global_config()
+    cfg = load_global_config(EXEC_ROOT)
     thrust_sep = str(getattr(cfg, "thrust_sep", ","))
     thrust_header = getattr(cfg, "thrust_header", 0)
     thrust_data = pd.read_csv(data_file, sep=thrust_sep, header=thrust_header)

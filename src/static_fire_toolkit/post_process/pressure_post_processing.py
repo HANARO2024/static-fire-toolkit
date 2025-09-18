@@ -41,11 +41,6 @@ from static_fire_toolkit.config_loader import load_global_config
 
 # Add parent directory to Python path to import config
 sys.path.append(os.path.dirname(__file__))
-# Load global configuration from execution root
-_CFG = load_global_config()
-frequency = _CFG.frequency
-pressure_time_col_idx = _CFG.pressure_time_col_idx
-pressure_col_idx = _CFG.pressure_col_idx
 
 
 class PressurePostProcess:
@@ -75,11 +70,17 @@ class PressurePostProcess:
         Raises:
             ValueError: If input data is invalid or missing required columns
         """
-        # Set up logging
-        self._logger = logging.getLogger(__name__)
         self._BASE_DIR = os.path.abspath(os.path.dirname(__file__))
         # Use execution root for all I/O (logs/results)
         self._EXEC_ROOT = os.path.abspath(execution_root or os.getcwd())
+        # Load global configuration from execution root
+        self._CFG = load_global_config(self._EXEC_ROOT)
+        self._frequency = self._CFG.frequency
+        self._pressure_time_col_idx = self._CFG.pressure_time_col_idx
+        self._pressure_col_idx = self._CFG.pressure_col_idx
+
+        # Set up logging
+        self._logger = logging.getLogger(__name__)
         log_dir = os.path.join(self._EXEC_ROOT, "logs")
         os.makedirs(log_dir, exist_ok=True)
         log_filename = os.path.join(log_dir, f"{file_name}-pressure_processing.log")
@@ -130,13 +131,13 @@ class PressurePostProcess:
 
             # Bounds check for configured indices
             if (
-                pressure_time_col_idx >= pressure_data_raw.shape[1]
-                or pressure_col_idx >= pressure_data_raw.shape[1]
+                self._pressure_time_col_idx >= pressure_data_raw.shape[1]
+                or self._pressure_col_idx >= pressure_data_raw.shape[1]
             ):
                 self._logger.error(
                     "Configured pressure column indices are out of bounds: time_idx=%d, pressure_idx=%d, cols=%d",
-                    pressure_time_col_idx,
-                    pressure_col_idx,
+                    self._pressure_time_col_idx,
+                    self._pressure_col_idx,
                     pressure_data_raw.shape[1],
                 )
                 raise ValueError(
@@ -144,7 +145,7 @@ class PressurePostProcess:
                 )
 
             self._data_raw = pressure_data_raw.iloc[
-                :, [pressure_time_col_idx, pressure_col_idx]
+                :, [self._pressure_time_col_idx, self._pressure_col_idx]
             ].copy()
             self._data_raw.columns = ["time", "pressure"]
             self._data_raw["pressure"] = pd.to_numeric(
@@ -226,11 +227,9 @@ class PressurePostProcess:
                     "   1-1. Detected peak width is very small: %.2f. Using fallback default width(20).",
                     width_value,
                 )
-                width_value = 20.0  # 기본 너비 값 사용
+                width_value = 20.0  # fallback default width
 
             # Calculate indices with bounds checking
-            # (2025.03.06.) 정확한 이유는 아직 불명이나, 추력 데이터 후처리 시의 구간 추정 폭과 다른 값을 사용할 경우 드물게 터무니없이 큰 압력 값을 출력하는 버그가 존재함.
-            # 추력 데이터 후처리 코드와 동일한 기준(앞으로 2 * width_value, 뒤로 6 * width_value)을 사용하거나, 혹은 아예 앞뒤로 충분히 큰 마진(예: 4 * width_value, 8 * width_value)을 둘 것을 권고함.
             start_index = max(0, int(peak_index - 2 * width_value))
             end_index = min(len(data), int(peak_index + 6 * width_value))
 
@@ -291,7 +290,7 @@ class PressurePostProcess:
         """
         self._logger.info("   1-2. Starting interpolation of pressure data.")
         try:
-            time_interval = 1 / frequency
+            time_interval = 1 / self._frequency
 
             # PCHIP interpolation
             spline_function = PchipInterpolator(data["time"], data["pressure"])
@@ -324,7 +323,7 @@ class PressurePostProcess:
         """
         self._logger.info("1. Starting data preset process.")
         try:
-            # 데이터 검증
+            # data validation
             if (
                 "time" not in self._data_raw.columns
                 or "pressure" not in self._data_raw.columns
@@ -334,7 +333,7 @@ class PressurePostProcess:
                     "Missing required columns 'time' or 'pressure' in raw data"
                 )
 
-            # 압력 raw 데이터 초기 통계 기록
+            # initial statistics of pressure raw data
             pressure_stats = self._data_raw["pressure"].describe()
             self._logger.info(
                 "1. Pressure data statistics: min=%.3f, max=%.3f, mean=%.3f, std=%.3f",
@@ -635,7 +634,7 @@ if __name__ == "__main__":
     # Read and process data
     from static_fire_toolkit.config_loader import load_global_config
 
-    cfg = load_global_config()
+    cfg = load_global_config(EXEC_ROOT)
     pressure_sep = str(getattr(cfg, "pressure_sep", ","))
     pressure_header = getattr(cfg, "pressure_header", 0)
     pressure_data = pd.read_csv(
