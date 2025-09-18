@@ -44,6 +44,8 @@ sys.path.append(os.path.dirname(__file__))
 # Load global configuration from execution root
 _CFG = load_global_config()
 frequency = _CFG.frequency
+pressure_time_col_idx = _CFG.pressure_time_col_idx
+pressure_col_idx = _CFG.pressure_col_idx
 
 
 class PressurePostProcess:
@@ -117,7 +119,33 @@ class PressurePostProcess:
 
         # Process raw pressure data
         try:
-            self._data_raw = pressure_data_raw.iloc[:, [0, 2]].copy()
+            # Ensure enough columns
+            if pressure_data_raw.shape[1] < 2:
+                self._logger.error(
+                    "Input data must have at least two columns for time, pressure"
+                )
+                raise ValueError(
+                    "Input data must have at least two columns for time, pressure"
+                )
+
+            # Bounds check for configured indices
+            if (
+                pressure_time_col_idx >= pressure_data_raw.shape[1]
+                or pressure_col_idx >= pressure_data_raw.shape[1]
+            ):
+                self._logger.error(
+                    "Configured pressure column indices are out of bounds: time_idx=%d, pressure_idx=%d, cols=%d",
+                    pressure_time_col_idx,
+                    pressure_col_idx,
+                    pressure_data_raw.shape[1],
+                )
+                raise ValueError(
+                    "Configured pressure column indices are out of bounds."
+                )
+
+            self._data_raw = pressure_data_raw.iloc[
+                :, [pressure_time_col_idx, pressure_col_idx]
+            ].copy()
             self._data_raw.columns = ["time", "pressure"]
             self._data_raw["pressure"] = pd.to_numeric(
                 self._data_raw["pressure"], errors="coerce"

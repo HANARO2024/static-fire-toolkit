@@ -54,6 +54,8 @@ gaussian_weak_sigma = _CFG.gaussian_weak_sigma
 gaussian_strong_sigma = _CFG.gaussian_strong_sigma
 start_criteria = _CFG.start_criteria
 end_criteria = _CFG.end_criteria
+thrust_time_col_idx = _CFG.thrust_time_col_idx
+thrust_col_idx = _CFG.thrust_col_idx
 
 
 class ThrustPostProcess:
@@ -125,6 +127,7 @@ class ThrustPostProcess:
             self._logger.info("   Legacy data format detected: Transpose data")
             data_raw = data_raw.transpose()
 
+        # Ensure enough columns
         if data_raw.shape[1] < 2:
             self._logger.error(
                 "Input data must have at least two columns for time and thrust."
@@ -133,7 +136,20 @@ class ThrustPostProcess:
                 "Input data must have at least two columns for time and thrust."
             )
 
-        self._data_raw: pd.DataFrame = data_raw.copy()
+        # Select columns based on configuration indices
+        if (
+            thrust_time_col_idx >= data_raw.shape[1]
+            or thrust_col_idx >= data_raw.shape[1]
+        ):
+            self._logger.error(
+                "Configured thrust column indices are out of bounds: time_idx=%d, thrust_idx=%d, cols=%d",
+                thrust_time_col_idx,
+                thrust_col_idx,
+                data_raw.shape[1],
+            )
+            raise ValueError("Configured thrust column indices are out of bounds.")
+
+        self._data_raw = data_raw.iloc[:, [thrust_time_col_idx, thrust_col_idx]].copy()
         self._data_raw.columns = ["time", "thrust"]
         self._file_name: str = file_name
         self._input_voltage: float = input_voltage

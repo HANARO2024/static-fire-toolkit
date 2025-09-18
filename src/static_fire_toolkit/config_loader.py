@@ -36,8 +36,12 @@ class Config:
     end_criteria: float = 0.15  # Criteria for the ending point of a meaningful interval in thrust data processing
     thrust_sep: str = ","  # separator for thrust data, character or Regex
     thrust_header: int | None = 0  # header for thrust data (row number or None)
+    thrust_time_col_idx: int = 0  # index of time column
+    thrust_col_idx: int = 1  # index of thrust column
     pressure_sep: str = ","  # separator for pressure data, character or Regex
     pressure_header: int | None = 0  # header for pressure data (row number or None)
+    pressure_time_col_idx: int = 0  # index of datetime column
+    pressure_col_idx: int = 1  # index of pressure column
 
 
 def _read_attr(cfg: Any, name: str, default: Any) -> Any:
@@ -76,8 +80,18 @@ def _load_from_python(path: Path, base: Config) -> Config:
             end_criteria=float(_read_attr(mod, "end_criteria", base.end_criteria)),
             thrust_sep=str(_read_attr(mod, "thrust_sep", base.thrust_sep)),
             thrust_header=_read_attr(mod, "thrust_header", base.thrust_header),
+            thrust_time_col_idx=int(
+                _read_attr(mod, "thrust_time_col_idx", base.thrust_time_col_idx)
+            ),
+            thrust_col_idx=int(_read_attr(mod, "thrust_col_idx", base.thrust_col_idx)),
             pressure_sep=str(_read_attr(mod, "pressure_sep", base.pressure_sep)),
             pressure_header=_read_attr(mod, "pressure_header", base.pressure_header),
+            pressure_time_col_idx=int(
+                _read_attr(mod, "pressure_time_col_idx", base.pressure_time_col_idx)
+            ),
+            pressure_col_idx=int(
+                _read_attr(mod, "pressure_col_idx", base.pressure_col_idx)
+            ),
         )
     return base
 
