@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-09-20
+
+### Fixed
+- Correct `__version__` definition in `src/__init__.py` to dynamically read from package metadata.  
+  This ensures consistency between `pyproject.toml` and runtime `__version__`, preventing version mismatches in future releases.
+- Fix broken PyPI download badge in `README.md` (remove deprecated `pypi/dm` badge)
+
 ## [1.0.0] - 2025-09-19
 
 ### Added
