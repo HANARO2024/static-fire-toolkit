@@ -1,4 +1,4 @@
-![HANARO SFT Logo](docs/logo-banner.png)
+![HANARO SFT Logo](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/docs/logo-banner.png)
 
 [![License - MIT](https://img.shields.io/github/license/snu-hanaro/static-fire-toolkit)](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/LICENSE)
 [![PyPI Version](https://img.shields.io/pypi/v/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit/)
@@ -85,20 +85,20 @@ sft [--root <path>] burnrate [--expt <expt_file_name>]  # e.g. sft --root exampl
 Run `sft --help` and `sft [--root <path>] info` for more details.
 
 #### Examples from this repo:
-- Input samples: [examples/data/_thrust_raw/](examples/data/_thrust_raw/), [examples/data/_pressure_raw/](examples/data/_pressure_raw/), [examples/config.xlsx](examples/config.xlsx)
-- Output samples: [examples/results/thrust/](examples/results/thrust/), [examples/results/pressure/](examples/results/pressure/), [examples/results/burnrate/](examples/results/burnrate/)
+- Input samples: [`examples/data/_thrust_raw/`](https://github.com/snu-hanaro/static-fire-toolkit/tree/main/examples/data/_thrust_raw), [`examples/data/_pressure_raw/`](https://github.com/snu-hanaro/static-fire-toolkit/tree/main/examples/data/_pressure_raw/), [`examples/config.xlsx`](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/examples/config.xlsx), [`examples/global_config.py`](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/examples/global_config.py)
+- Output samples: [`examples/results/thrust/`](https://github.com/snu-hanaro/static-fire-toolkit/tree/main/examples/results/thrust), [`examples/results/pressure/`](https://github.com/snu-hanaro/static-fire-toolkit/tree/main/examples/results/pressure), [`examples/results/burnrate/`](https://github.com/snu-hanaro/static-fire-toolkit/tree/main/examples/results/burnrate)
 
 #### Output preview (from `examples/`):
 
-![Thrust Graph](./examples/results/thrust_graph/KNSB_250220_thrust.png)
+![Thrust Graph](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/examples/results/thrust_graph/KNSB_250220_thrust.png)
 
-![Pressure Graph](./examples/results/pressure_graph/KNSB_250220_pressure.png)
+![Pressure Graph](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/examples/results/pressure_graph/KNSB_250220_pressure.png)
 
-![Burnrate-Time Graph](./examples/results/burnrate_graph/Burnrate-Time/KNSB_250220_burnrate.png)
+![Burnrate-Time Graph](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/examples/results/burnrate_graph/Burnrate-Time/KNSB_250220_burnrate.png)
 
-![Burnrate-Pressure Graph](./examples/results/burnrate_graph/Burnrate-Pressure/KNSB_250220_burnrate.png)
+![Burnrate-Pressure Graph](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/examples/results/burnrate_graph/Burnrate-Pressure/KNSB_250220_burnrate.png)
 
-![Burnrate-Pressure Animation](./examples/results/burnrate_graph/Burnrate-Pressure/animation/KNSB_250220_burnrate_animation.gif)
+![Burnrate-Pressure Animation](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/examples/results/burnrate_graph/Burnrate-Pressure/animation/KNSB_250220_burnrate_animation.gif)
 
 ### Global Configuration: `global_config.py`
 
@@ -127,7 +127,7 @@ Optional parsing controls (fallbacks apply if unspecified):
 - thrust_header, pressure_header (header row index or None, default: `0`)
 - thrust_time_col_idx, thrust_col_idx, pressure_time_col_idx, pressure_col_idx
 
-[Example](examples/global_config.py):
+[Example](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/examples/global_config.py):
 
 ```python
 # ------------ Load Cell (Required) ------------
@@ -315,7 +315,7 @@ pytest -q
 
 ### CI/CD Strategy
 - Branching: trunk-based development (main protected)
-- Matrix testing: Python 3.10–3.13, both latest and [minimum dependencies](constraints-min.txt)
+- Matrix testing: Python 3.10–3.13, both latest and [minimum dependencies](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/constraints-min.txt)
 - Tags:
   - Signed tags by default
   - Annotated tags allowed with --no-sign
@@ -334,4 +334,4 @@ Please use Issues/PRs with templates. Recommended:
 
 ## License
 
-This project is licensed under the [MIT License](/LICENSE).
+This project is licensed under the [MIT License](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/LICENSE).
