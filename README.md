@@ -5,7 +5,6 @@
 [![SemVer Versioning](https://img.shields.io/badge/version_scheme-SemVer-0097a7)](https://semver.org/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/static-fire-toolkit)](https://pypi.python.org/pypi/static-fire-toolkit)
 
-[![Downloads](https://img.shields.io/pypi/dm/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit)
 [![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/snu-hanaro/static-fire-toolkit/issues)
 [![GitHub actions status](https://github.com/snu-hanaro/static-fire-toolkit/workflows/CI/badge.svg)](https://github.com/snu-hanaro/static-fire-toolkit/actions?query=workflow%3ACI)
 
