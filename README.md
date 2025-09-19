@@ -1,6 +1,13 @@
-# HANARO SFT (Static-Fire Toolkit)
+![HANARO SFT Logo](docs/logo-banner.png)
 
-![HANARO SFT Logo](./docs/logo-banner.png)
+[![License - MIT](https://img.shields.io/github/license/snu-hanaro/static-fire-toolkit)](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/LICENSE)
+[![PyPI Version](https://img.shields.io/pypi/v/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit/)
+[![SemVer Versioning](https://img.shields.io/badge/version_scheme-SemVer-0097a7)](https://semver.org/)
+[![Supported Python versions](https://img.shields.io/pypi/pyversions/static-fire-toolkit)](https://pypi.python.org/pypi/static-fire-toolkit)
+
+[![Downloads](https://img.shields.io/pypi/dm/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit)
+[![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/snu-hanaro/static-fire-toolkit/issues)
+[![GitHub actions status](https://github.com/snu-hanaro/static-fire-toolkit/workflows/CI/badge.svg)](https://github.com/snu-hanaro/static-fire-toolkit/actions?query=workflow%3ACI)
 
 **HANARO SFT (Static-Fire Toolkit)** is an open-source command-line toolkit developed by the [Seoul National University Rocket Team **HANARO**](https://hanaro.snu.ac.kr/).  
 It provides a standardized workflow for processing **static-fire test data** from amateur and research solid rocket motors, focusing on **data cleaning, performance analysis, burn rate estimation, and visualization**.
@@ -45,8 +52,8 @@ python3 -m pip install -e .
 
 ```sh
 root/                        # run sft here (or specify this path using the --root option)
-├─ global_config.xlsx        # global configs, optional
-├─ config.xlsx               # per-test configs, required
+├─ global_config.xlsx        # global configs
+├─ config.xlsx               # per-test configs
 ├─ data/
 │  ├─ _pressure_raw/         # input pressure raw CSVs
 │  └─ _thrust_raw/           # input thrust raw CSVs
@@ -78,8 +85,8 @@ sft [--root <path>] burnrate [--expt <expt_file_name>]  # e.g. sft --root exampl
 Run `sft --help` and `sft [--root <path>] info` for more details.
 
 #### Examples from this repo:
-- Input samples: [examples/data/_thrust_raw/](./examples/data/_thrust_raw/), [examples/data/_pressure_raw/](./examples/data/_pressure_raw/), [examples/config.xlsx](./examples/config.xlsx)
-- Output samples: [examples/results/thrust/](./examples/results/thrust/), [examples/results/pressure/](./examples/results/pressure/), [examples/results/burnrate/](./examples/results/burnrate/)
+- Input samples: [examples/data/_thrust_raw/](examples/data/_thrust_raw/), [examples/data/_pressure_raw/](examples/data/_pressure_raw/), [examples/config.xlsx](examples/config.xlsx)
+- Output samples: [examples/results/thrust/](examples/results/thrust/), [examples/results/pressure/](examples/results/pressure/), [examples/results/burnrate/](examples/results/burnrate/)
 
 #### Output preview (from `examples/`):
 
@@ -87,11 +94,71 @@ Run `sft --help` and `sft [--root <path>] info` for more details.
 
 ![Pressure Graph](./examples/results/pressure_graph/KNSB_250220_pressure.png)
 
+![Burnrate-Time Graph](./examples/results/burnrate_graph/Burnrate-Time/KNSB_250220_burnrate.png)
+
 ![Burnrate-Pressure Graph](./examples/results/burnrate_graph/Burnrate-Pressure/KNSB_250220_burnrate.png)
 
-![Burnrate Animation](./examples/results/burnrate_graph/Burnrate-Pressure/animation/KNSB_250220_burnrate_animation.gif)
+![Burnrate-Pressure Animation](./examples/results/burnrate_graph/Burnrate-Pressure/animation/KNSB_250220_burnrate_animation.gif)
 
 ### Global Configuration: `global_config.py`
+
+Define runtime parameters for parsing and processing. The following load-cell parameters are device-specific and must be explicitly set:
+
+- sensitivity_mv_per_v (mV/V)
+- rated_capacity_kgf (kgf)
+- gain_internal_resistance_kohm (kOhm)
+- gain_offset (V)
+
+> [!NOTE]
+> **How to Convert Voltage[V] to Thrust[N]**:  
+> - `gain = gain_offset + (gain_internal_resistance_kohm * 1000)[Ω] / gain_resistance[Ω]`
+> - `bridge_output_mv [mV] = sensitivity_mv_per_v[mV/V] * excitation_voltage[V] * thrust[N] / (rated_capacity_kgf[kgf] * g[N/kgf])`
+> - `measured_output_v = (bridge_output_mv / 1000)[V] * gain`
+>
+> ```
+> thrust[N] = (bridge_output_mv / sensitivity_mv_per_v)[V] / excitation_voltage[V] * (rated_capacity_kgf * g)[N]
+>           = (measured_output_v * 1000 / gain)[mV] / sensitivity_mv_per_v[mV/V] / excitation_voltage[V]
+>              * (rated_capacity_kgf * g)[N]
+> ```
+>
+
+Optional parsing controls (fallbacks apply if unspecified):
+- thrust_sep, pressure_sep (CSV delimiter, default:`,`)
+- thrust_header, pressure_header (header row index or None, default: `0`)
+- thrust_time_col_idx, thrust_col_idx, pressure_time_col_idx, pressure_col_idx
+
+[Example](examples/global_config.py):
+
+```python
+# ------------ Load Cell (Required) ------------
+rated_capacity_kgf = 500  # 정격하중: rated capacity of load cell, kgf
+sensitivity_mv_per_v = 3  # 감도: sensitivity of load cell, mV/V
+gain_internal_resistance_kohm = (
+    49.4  # amplifier-specific internal resistor of load cell, kΩ
+)
+gain_offset = 1  # gain offset of load cell
+
+# ----------- Thrust Data Processing -----------
+thrust_sep = "[,\t]"  # separator for thrust data, character or Regex
+thrust_header = None  # header for thrust data (row number or None)
+thrust_time_col_idx = 0  # index of time column
+thrust_col_idx = 1  # index of thrust column
+
+# ---------- Pressure Data Processing ----------
+pressure_sep = ";"  # separator for pressure data, character or Regex
+pressure_header = 0  # header for pressure data (row number or None)
+pressure_time_col_idx = 0  # index of datetime column
+pressure_col_idx = 2  # index of pressure column
+
+# ------------ Processing Params ---------------
+frequency = 100  # Sampling rate, Hz
+cutoff_frequency = 30  # LPF, Hz
+lowpass_order = 5  # order for low pass filter
+gaussian_weak_sigma = 1.5  # sigma for weak gaussian filter
+gaussian_strong_sigma = 10  # sigma for strong gaussian filter
+start_criteria = 0.2  # Criteria for the starting point of a meaningful interval in thrust data processing
+end_criteria = 0.1  # Criteria for the ending point of a meaningful interval in thrust data processing
+```
 
 ### Per-Test Configuration: `config.xlsx`
 Record one row per test; the latest row is processed by default. Required columns:
@@ -102,7 +169,7 @@ Record one row per test; the latest row is processed by default. Required column
 | date | Date in YYMMDD | 250220 |
 | type | Propellant type | KNSB |
 | expt_file_name | Experiment base name | KNSB_250220 |
-| expt_input_voltage [V] | DAQ input voltage | 11.94 |
+| expt_excitation_voltage [V] | DAQ excitation voltage | 11.94 |
 | expt_resistance [Ohm] | DAQ potentiometer resistance | 200.4 |
 | totalmass [g] | Propellant total mass | 4996.3 |
 | Nozzlediameter [mm] | Throat diameter | 20 |
@@ -113,6 +180,9 @@ Record one row per test; the latest row is processed by default. Required column
 
 > [!NOTE]
 > `expt_file_name` (if present) is auto-filled based on the values of date and type — do not edit. Notes/remarks are optional.
+
+> [!NOTE]
+> If your sheet uses the legacy column name `expt_input_voltage [V]` instead of `expt_excitation_voltage [V]`, it will be used automatically as a fallback.
 
 ### Data I/O Format & Processing Pipeline
 - **Inputs**:
@@ -139,24 +209,26 @@ Record one row per test; the latest row is processed by default. Required column
 - Filename: `TYPE_YYMMDD_thrust_raw.csv` (e.g., `KNSB_250220_thrust_raw.csv`)
 - Default Format: comma-separated, 2 columns, with column labels (Configurable via [`global_config.py`](#global-configuration-global_configpy))
 	1. time (s)
-  2. voltage (V) (should be 1:1 to thrust)
+  2. voltage (V) (must be 1:1 linearly convertible to thrust)
 - Important: treat raw CSV as read-only. Re-saving in third-party editor such as Excel may change encoding/separators.
 
-Example (excerpt):
+Example (header + excerpt):
 
 ```csv
+time,voltage(V)
 246.42052460007835,1.34765625
 246.42483200004790,1.455078125
 ```
 
 #### Pipeline
 1. Read the latest test row from `config.xlsx`
-2. Load the matching raw thrust CSV from `_thrust_raw/`
-3. Extract combustion window; handle spikes/outliers
-4. PCHIP interpolation to Δt = 1/`frequency` s
-5. Apply low-pass + Gaussian filters
-6. Save processed thrust CSV → `results/thrust/TYPE_YYMMDD_thrust.csv`
-7. Save thrust plot PNG → `results/thrust_graph/TYPE_YYMMDD_thrust.png`
+2. Load and Parse the matching raw thrust CSV from `_thrust_raw/`
+3. Convert voltage to thrust
+4. Extract combustion window; handle spikes/outliers
+5. PCHIP interpolation to Δt = 1/`frequency` s
+6. Apply low-pass + Gaussian filters
+7. Save processed thrust CSV → `results/thrust/TYPE_YYMMDD_thrust.csv`
+8. Save thrust plot PNG → `results/thrust_graph/TYPE_YYMMDD_thrust.png`
 
 #### Output CSV schema
 
@@ -210,7 +282,7 @@ Datetime,Pressure (Bar)
 
 ### How to Report Issues
 If you encounter a problem, please open an issue with:
-- The output of `sft info --root <your-root>` (environment and package details)
+- The output of `sft info --root <your-root>` (global configurations, environment, and package details)
 - The corresponding logs in the `logs/` directory
 - If possible, a minimal sample (subset of `data/_thrust_raw`, `data/_pressure_raw`, and `config.xlsx`) that reproduces the issue
 
@@ -228,7 +300,7 @@ It compensates for the difference between local atmospheric pressure at test tim
 - pytest: testing
 - coverage: test coverage reports
 - pre-commit — enforce style checks before commits
-- GitHub Actions — CI/CD (matrix testing across Python 3.9–3.13)
+- GitHub Actions — CI/CD (matrix testing across Python 3.10–3.13)
 
 ### Local setup
 
