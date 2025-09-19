@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "static-fire-toolkit"
-version = "0.1.0"
-description = "Static-fire test data processing toolkit"
+version = "1.0.0"
+description = "Command-line toolkit for static-fire test data processing and analysis"
 readme = "README.md"
 requires-python = ">=3.10"
 
@@ -54,7 +54,7 @@ sft = "static_fire_toolkit.cli:main"
 [project.urls]
 Homepage = "https://github.com/snu-hanaro/static-fire-toolkit"
 Source = "https://github.com/snu-hanaro/static-fire-toolkit"
-Changelog = "https://github.com/snu-hanaro/static-fire-toolkit/docs/CHANGELOG.md"
+Changelog = "https://github.com/snu-hanaro/static-fire-toolkit/blob/main/docs/CHANGELOG.md"
 Issues = "https://github.com/snu-hanaro/static-fire-toolkit/issues"
 "Release Notes" = "https://github.com/snu-hanaro/static-fire-toolkit/releases"
 "About HANARO" = "https://hanaro.snu.ac.kr/"
