@@ -54,16 +54,35 @@ def _load_config(execution_root: Path, expt_name: str | None) -> dict[str, Any]:
         "totalmass [g]",
         "Nozzlediameter [mm]",
         "segment",
-        "expt_input_voltage [V]",
+        # Accept both legacy and new column names for excitation voltage
+        # either "expt_excitation_voltage [V]" or legacy "expt_input_voltage [V]"
+        "expt_excitation_voltage [V]",
         "expt_resistance [Ohm]",
     ]
     missing = [col for col in required_columns if col not in config.columns]
+    # Backward-compat: if the only missing item is the new excitation voltage column,
+    # but the legacy column exists, treat as satisfied.
+    if (
+        "expt_excitation_voltage [V]" in missing
+        and "expt_input_voltage [V]" in config.columns
+    ):
+        missing = [col for col in missing if col != "expt_excitation_voltage [V]"]
     if missing:
         raise ValueError(f"Missing columns in configuration: {missing}")
 
+    # Backward-compatible read for excitation voltage
+    if "expt_excitation_voltage [V]" in config.columns:
+        expt_excitation_voltage = config["expt_excitation_voltage [V]"][idx]
+    elif "expt_input_voltage [V]" in config.columns:
+        expt_excitation_voltage = config["expt_input_voltage [V]"][idx]
+    else:
+        raise ValueError(
+            "Missing excitation voltage column in configuration: expected 'expt_excitation_voltage [V]' or legacy 'expt_input_voltage [V]'"
+        )
+
     return {
         "expt_file_name": config["expt_file_name"][idx],
-        "expt_input_voltage": config["expt_input_voltage [V]"][idx],
+        "expt_excitation_voltage": expt_excitation_voltage,
         "expt_resistance": config["expt_resistance [Ohm]"][idx],
         "grain": {
             "OD": float(config["Outerdiameter [mm]"][idx]),
@@ -130,7 +149,7 @@ def cmd_thrust(args: argparse.Namespace) -> None:
     proc = ThrustPostProcess(
         data_raw=thrust_raw,
         file_name=cfg["expt_file_name"],
-        input_voltage=cfg["expt_input_voltage"],
+        excitation_voltage=cfg["expt_excitation_voltage"],
         resistance=cfg["expt_resistance"],
         execution_root=str(exec_root),
     )
@@ -209,7 +228,7 @@ def cmd_process(args: argparse.Namespace) -> None:
     thrust_proc = ThrustPostProcess(
         data_raw=thrust_raw,
         file_name=cfg["expt_file_name"],
-        input_voltage=cfg["expt_input_voltage"],
+        excitation_voltage=cfg["expt_excitation_voltage"],
         resistance=cfg["expt_resistance"],
         execution_root=str(exec_root),
     )

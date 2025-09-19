@@ -24,16 +24,21 @@ from typing import Any
 class Config:
     """Runtime configuration values used by processing modules."""
 
-    rated_output: float = 3.0  # rated output of load cell, V
-    rated_load: float = 500.0  # rated load of load cell, kgf
-    g: float = 9.80665  # gravitational acceleration, m/s^2
+    # Load cell & acquisition (must be explicitly set by user)
+    sensitivity_mv_per_v: float | None = None  # load cell sensitivity (mV/V)
+    rated_capacity_kgf: float | None = None  # load cell rated capacity (kgf)
+    gain_internal_resistance_kohm: float | None = (
+        None  # amplifier internal resistance (kOhm)
+    )
+    gain_offset: float | None = None  # amplifier gain offset (volts)
+    # Other parameters
     frequency: float = 100.0  # Sampling rate, Hz (Δt = 0.01 s)
-    cutoff_frequency: float = 10.0  # Hz for LPF
+    cutoff_frequency: float = 30.0  # Hz for LPF
     lowpass_order: int = 5  # order for lowpass filter
-    gaussian_weak_sigma: float = 2.0  # sigma for weak gaussian filter
-    gaussian_strong_sigma: float = 8.0  # sigma for strong gaussian filter
-    start_criteria: float = 0.15  # Criteria for the starting point of a meaningful interval in thrust data processing
-    end_criteria: float = 0.15  # Criteria for the ending point of a meaningful interval in thrust data processing
+    gaussian_weak_sigma: float = 1.5  # sigma for weak gaussian filter
+    gaussian_strong_sigma: float = 10.0  # sigma for strong gaussian filter
+    start_criteria: float = 0.2  # Criteria for the starting point of a meaningful interval in thrust data processing
+    end_criteria: float = 0.1  # Criteria for the ending point of a meaningful interval in thrust data processing
     thrust_sep: str = ","  # separator for thrust data, character or Regex
     thrust_header: int | None = 0  # header for thrust data (row number or None)
     thrust_time_col_idx: int = 0  # index of time column
@@ -59,10 +64,31 @@ def _load_from_python(path: Path, base: Config) -> Config:
     if spec and spec.loader:
         mod = module_from_spec(spec)
         spec.loader.exec_module(mod)  # type: ignore[reportAttributeAccessIssue]
+        # Backward-compatible mapping from legacy names
+        sensitivity = _read_attr(mod, "sensitivity_mv_per_v", base.sensitivity_mv_per_v)
+        if sensitivity == base.sensitivity_mv_per_v:
+            sensitivity = _read_attr(mod, "rated_output", sensitivity)
+
+        rated_capacity = _read_attr(mod, "rated_capacity_kgf", base.rated_capacity_kgf)
+        if rated_capacity == base.rated_capacity_kgf:
+            rated_capacity = _read_attr(mod, "rated_load", rated_capacity)
+
+        gain_internal_res_kohm = _read_attr(
+            mod, "gain_internal_resistance_kohm", base.gain_internal_resistance_kohm
+        )
+        gain_offset = _read_attr(mod, "gain_offset", base.gain_offset)
+
         return Config(
-            rated_output=float(_read_attr(mod, "rated_output", base.rated_output)),
-            rated_load=float(_read_attr(mod, "rated_load", base.rated_load)),
-            g=float(_read_attr(mod, "g", base.g)),
+            sensitivity_mv_per_v=(None if sensitivity is None else float(sensitivity)),
+            rated_capacity_kgf=(
+                None if rated_capacity is None else float(rated_capacity)
+            ),
+            gain_internal_resistance_kohm=(
+                None
+                if gain_internal_res_kohm is None
+                else float(gain_internal_res_kohm)
+            ),
+            gain_offset=(None if gain_offset is None else float(gain_offset)),
             frequency=float(_read_attr(mod, "frequency", base.frequency)),
             cutoff_frequency=float(
                 _read_attr(mod, "cutoff_frequency", base.cutoff_frequency)
