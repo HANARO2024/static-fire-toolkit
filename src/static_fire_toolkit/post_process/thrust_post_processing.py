@@ -56,7 +56,7 @@ class ThrustPostProcess:
         self,
         data_raw: pd.DataFrame,
         file_name: str,
-        input_voltage: float,
+        excitation_voltage: float,
         resistance: float,
         execution_root: str | None = None,
     ) -> None:
@@ -65,7 +65,7 @@ class ThrustPostProcess:
         Args:
             data_raw (pd.DataFrame): Raw data containing time and thrust measurements.
             file_name (str): File name identifier.
-            input_voltage (float): Input voltage used during measurement.
+            excitation_voltage (float): Excitation voltage used during measurement.
             resistance (float): Resistance value used during measurement.
             execution_root (str | None): Base directory for logs/ and results/*.
                 If None, defaults to current working directory.
@@ -157,7 +157,7 @@ class ThrustPostProcess:
         ].copy()
         self._data_raw.columns = ["time", "thrust"]
         self._file_name: str = file_name
-        self._input_voltage: float = input_voltage
+        self._excitation_voltage: float = excitation_voltage
         self._resistance: float = resistance
 
         self._logger.info("0. Initialization complete.")
@@ -227,7 +227,7 @@ class ThrustPostProcess:
             data["thrust"] = (
                 data["thrust"]
                 * 1000
-                / (self._sensitivity_mv_per_v * self._input_voltage)
+                / (self._sensitivity_mv_per_v * self._excitation_voltage)
                 * self._rated_capacity_kgf
                 * self._g
                 / (
@@ -662,10 +662,12 @@ class ThrustPostProcess:
             )
 
             ax.annotate(
-                "Impulse            " + str(round(self._impulse, 2)) + " Ns\n"
-                "Input Voltage   " + str(round(self._input_voltage, 2)) + " V\n"
-                "Resistance       " + str(round(self._resistance, 2)) + r" $\Omega$",
-                xy=(0.72, 0.85),
+                "Impulse                 " + str(round(self._impulse, 2)) + " Ns\n"
+                "Excitation Voltage " + str(round(self._excitation_voltage, 2)) + " V\n"
+                "Resistance            "
+                + str(round(self._resistance, 2))
+                + r" $\Omega$",
+                xy=(0.67, 0.85),
                 xycoords="axes fraction",
                 size=20,
                 font="Arial",
@@ -733,7 +735,15 @@ if __name__ == "__main__":
     config = pd.read_excel(config_path, sheet_name=0, header=0, index_col=0)
     idx = len(config) - 1
     expt_file_name = config["expt_file_name"][idx]
-    expt_input_voltage = config["expt_input_voltage [V]"][idx]
+    # Backward-compatible: read excitation voltage from new or legacy column
+    if "expt_excitation_voltage [V]" in config.columns:
+        expt_excitation_voltage = config["expt_excitation_voltage [V]"][idx]
+    elif "expt_input_voltage [V]" in config.columns:
+        expt_excitation_voltage = config["expt_input_voltage [V]"][idx]
+    else:
+        raise ValueError(
+            "Missing excitation voltage column: expected 'expt_excitation_voltage [V]' or legacy 'expt_input_voltage [V]'"
+        )
     expt_resistance = config["expt_resistance [Ohm]"][idx]
 
     print(f"Loaded configuration for experiment: {expt_file_name}")
@@ -764,6 +774,6 @@ if __name__ == "__main__":
     print("Successfully loaded input data file.")
 
     process = ThrustPostProcess(
-        thrust_data, expt_file_name, expt_input_voltage, expt_resistance
+        thrust_data, expt_file_name, expt_excitation_voltage, expt_resistance
     )
     _ = process.run()
