@@ -504,8 +504,8 @@ class PressurePostProcess:
             )
 
             ax.annotate(
-                f"Average Pressure     {average_pressure:.2f} Bar",
-                xy=(0.67, 0.95),
+                f"Average Pressure   {average_pressure:.2f} Bar",
+                xy=(0.69, 0.94),
                 xycoords="axes fraction",
                 size=20,
                 font="Arial",
