@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "static-fire-toolkit"
-version = "1.0.0"
+version = "1.0.1"
 description = "Command-line toolkit for static-fire test data processing and analysis"
 readme = "README.md"
 requires-python = ">=3.10"
