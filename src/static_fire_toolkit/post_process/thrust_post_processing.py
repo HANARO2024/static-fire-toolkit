@@ -79,9 +79,11 @@ class ThrustPostProcess:
 
         # Load configuration parameters explicitly
         self._CFG = load_global_config(self._EXEC_ROOT)
-        self._rated_output = self._CFG.rated_output
-        self._rated_load = self._CFG.rated_load
+        self._sensitivity_mv_per_v = self._CFG.sensitivity_mv_per_v
+        self._rated_capacity_kgf = self._CFG.rated_capacity_kgf
         self._g = 9.80665  # gravitational acceleration, m/s^2
+        self._gain_internal_resistance_kohm = self._CFG.gain_internal_resistance_kohm
+        self._gain_offset = self._CFG.gain_offset
         self._frequency = self._CFG.frequency
         self._cutoff_frequency = self._CFG.cutoff_frequency
         self._lowpass_order = self._CFG.lowpass_order
@@ -200,14 +202,38 @@ class ThrustPostProcess:
         """
         self._logger.info("   1-1. Converting voltage to thrust.")
         try:
+            # Validate required config parameters
+            missing_params: list[str] = []
+            if self._sensitivity_mv_per_v is None:
+                missing_params.append("sensitivity_mv_per_v")
+            if self._rated_capacity_kgf is None:
+                missing_params.append("rated_capacity_kgf")
+            if self._gain_internal_resistance_kohm is None:
+                missing_params.append("gain_internal_resistance_kohm")
+            if self._gain_offset is None:
+                missing_params.append("gain_offset")
+            if missing_params:
+                self._logger.error(
+                    "Missing required load cell config: %s", ", ".join(missing_params)
+                )
+                raise ValueError(
+                    "Missing required load cell configuration: "
+                    + ", ".join(missing_params)
+                )
             # 전압 값을 추력으로 변환
+            # Convert volts -> thrust(N) using sensitivity (mV/V), capacity(kgf), excitation voltage(V),
+            # amplifier internal resistance (kOhm) and gain offset.
+            # Formula adapted to new config naming; assumes linear behavior.
             data["thrust"] = (
                 data["thrust"]
                 * 1000
-                / (self._rated_output * self._input_voltage)
-                * self._rated_load
+                / (self._sensitivity_mv_per_v * self._input_voltage)
+                * self._rated_capacity_kgf
                 * self._g
-                / (1 + 49.4 * 1000 / self._resistance)
+                / (
+                    self._gain_offset
+                    + self._gain_internal_resistance_kohm * 1000 / self._resistance
+                )
             )
         except Exception as e:
             self._logger.error("Error converting voltage to thrust: %s", e)
