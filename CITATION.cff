@@ -1,0 +1,318 @@
+cff-version: 1.2.0
+title: Static-Fire Toolkit
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Yunseo
+    family-names: Kim
+    email: yunseo@snu.ac.kr
+    affiliation: >-
+      Seoul National University Rocket Team Hanaro, Seoul
+      National University
+    orcid: 'https://orcid.org/0009-0003-6462-6600'
+  - given-names: Junghyeon
+    family-names: Yun
+    email: slnstill3am@snu.ac.kr
+    affiliation: >-
+      Seoul National University Rocket Team Hanaro, Seoul
+      National University
+    orcid: 'https://orcid.org/0009-0002-2047-2411'
+  - given-names: Jiwan
+    family-names: Seo
+    email: jiwan0216@snu.ac.kr
+    affiliation: >-
+      Seoul National University Rocket Team Hanaro, Seoul
+      National University
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.17218595
+    description: The concept DOI of the work.
+repository-code: 'https://github.com/snu-hanaro/static-fire-toolkit'
+repository: 'https://pypi.org/project/static-fire-toolkit/'
+abstract: >-
+  The Static-Fire Toolkit is an open-source Python package
+  for processing and analyzing thrust and chamber pressure
+  data from solid rocket motor static-fire tests. It
+  provides automated data cleaning, interpolation, and
+  optional regression analyses for burn rate estimation and
+  performance prediction.
+keywords:
+  - solid rocket motor
+  - static-fire
+  - sounding rocket
+  - rocket
+  - rocketry
+  - thrust
+  - pressure
+  - data processing
+  - data analysis
+  - aerospace engineering
+  - hanaro
+  - snu
+license: MIT
+references:
+  - type: article
+    authors:
+      - family-names: "Virtanen"
+        given-names: "Pauli"
+      - family-names: "Gommers"
+        given-names: "Ralf"
+      - family-names: "Oliphant"
+        given-names: "Travis E."
+      - family-names: "Haberland"
+        given-names: "Matt"
+      - family-names: "Reddy"
+        given-names: "Tyler"
+      - family-names: "Cournapeau"
+        given-names: "David"
+      - family-names: "Burovski"
+        given-names: "Evgeni"
+      - family-names: "Peterson"
+        given-names: "Pearu"
+      - family-names: "Weckesser"
+        given-names: "Warren"
+      - family-names: "Bright"
+        given-names: "Jonathan"
+      - family-names: "van der Walt"
+        given-names: "Stéfan J."
+      - family-names: "Brett"
+        given-names: "Matthew"
+      - family-names: "Wilson"
+        given-names: "Joshua"
+      - family-names: "Millman"
+        given-names: "K. Jarrod"
+      - family-names: "Mayorov"
+        given-names: "Nikolay"
+      - family-names: "Nelson"
+        given-names: "Andrew R. J."
+      - family-names: "Jones"
+        given-names: "Eric"
+      - family-names: "Kern"
+        given-names: "Robert"
+      - family-names: "Larson"
+        given-names: "Eric"
+      - family-names: "Carey"
+        given-names: "CJ"
+      - family-names: "Polat"
+        given-names: "İlhan"
+      - family-names: "Feng"
+        given-names: "Yu"
+      - family-names: "Moore"
+        given-names: "Eric W."
+      - family-names: "VanderPlas"
+        given-names: "Jake"
+      - family-names: "Laxalde"
+        given-names: "Denis"
+      - family-names: "Perktold"
+        given-names: "Josef"
+      - family-names: "Cimrman"
+        given-names: "Robert"
+      - family-names: "Henriksen"
+        given-names: "Ian"
+      - family-names: "Quintero"
+        given-names: "E.A."
+      - family-names: "Harris"
+        given-names: "Charles R"
+      - family-names: "Archibald"
+        given-names: "Anne M."
+      - family-names: "Ribeiro"
+        given-names: "Antônio H."
+      - family-names: "Pedregosa"
+        given-names: "Fabian"
+      - family-names: "van Mulbregt"
+        given-names: "Paul"
+      - name: "SciPy 1.0 Contributors"
+    title: "SciPy 1.0: Fundamental Algorithms for Scientific Computing in Python"
+    journal: "Nature Methods"
+    volume: "17"
+    issue: "3"
+    pages: "261-272"
+    year: 2020
+    doi: "10.1038/s41592-019-0686-2"
+  - type: article
+    authors:
+      - family-names: "Fritsch"
+        given-names: "F. N."
+      - family-names: "Butland"
+        given-names: "J."
+    title: "A method for constructing local monotone piecewise cubic interpolants"
+    journal: "SIAM Journal on Scientific and Statistical Computing"
+    volume: "5"
+    issue: "2"
+    pages: "300-304"
+    year: 1984
+    doi: "10.1137/0905021"
+  - type: article
+    authors:
+      - family-names: "Savitzky"
+        given-names: "Abraham"
+      - family-names: "Golay"
+        given-names: "M. J. E."
+    title: "Smoothing and Differentiation of Data by Simplified Least Squares Procedures"
+    journal: "Analytical Chemistry"
+    volume: "36"
+    issue: "8"
+    pages: "1627-1639"
+    year: 1964
+    doi: "10.1021/ac60214a047"
+  - type: article
+    authors:
+      - family-names: "Harris"
+        given-names: "Charles R."
+      - family-names: "Millman"
+        given-names: "K. Jarrod"
+      - family-names: "van der Walt"
+        given-names: "Stéfan J."
+      - family-names: "Gommers"
+        given-names: "Ralf"
+      - family-names: "Virtanen"
+        given-names: "Pauli"
+      - family-names: "Cournapeau"
+        given-names: "David"
+      - family-names: "Wieser"
+        given-names: "Eric"
+      - family-names: "Taylor"
+        given-names: "Julian"
+      - family-names: "Berg"
+        given-names: "Sebastian"
+      - family-names: "Smith"
+        given-names: "Nathaniel J."
+      - family-names: "Kern"
+        given-names: "Robert"
+      - family-names: "Picus"
+        given-names: "Matti"
+      - family-names: "Hoyer"
+        given-names: "Stephan"
+      - family-names: "van Kerkwijk"
+        given-names: "Marten H."
+      - family-names: "Brett"
+        given-names: "Matthew"
+      - family-names: "Haldane"
+        given-names: "Allan"
+      - family-names: "Fernández del Río"
+        given-names: "Jaime"
+      - family-names: "Wiebe"
+        given-names: "Mark"
+      - family-names: "Peterson"
+        given-names: "Pearu"
+      - family-names: "Gérard-Marchant"
+        given-names: "Pierre"
+      - family-names: "Sheppard"
+        given-names: "Kevin"
+      - family-names: "Reddy"
+        given-names: "Tyler"
+      - family-names: "Weckesser"
+        given-names: "Warren"
+      - family-names: "Abbasi"
+        given-names: "Hameer"
+      - family-names: "Gohlke"
+        given-names: "Christoph"
+      - family-names: "Oliphant"
+        given-names: "Travis E."
+    title: "Array programming with NumPy"
+    journal: "Nature"
+    volume: "585"
+    issue: "7825"
+    pages: "357-362"
+    year: 2020
+    doi: "10.1038/s41586-020-2649-2"
+    publisher:
+      name: "Springer Science and Business Media LLC"
+    url: "https://doi.org/10.1038/s41586-020-2649-2"
+  - type: article
+    authors:
+      - family-names: "Vieille"
+        given-names: "Paul"
+    title: "Étude sur le mode de combustion des matières explosives"
+    journal: "Journal Mémorial des Poudres et Salpêtres"
+    volume: "6"
+    year: 1893
+    pages: "256-391"
+  - type: article
+    authors:
+      - family-names: "Wilson"
+        given-names: "Greg"
+      - family-names: "Aruliah"
+        given-names: "D. A."
+      - family-names: "Brown"
+        given-names: "C. Titus"
+      - family-names: "Chue Hong"
+        given-names: "Neil P."
+      - family-names: "Davis"
+        given-names: "Matt"
+      - family-names: "Guy"
+        given-names: "Richard T."
+      - family-names: "Haddock"
+        given-names: "Steven H. D."
+      - family-names: "Huff"
+        given-names: "Kathryn D."
+      - family-names: "Mitchell"
+        given-names: "Ian M."
+      - family-names: "Plumbley"
+        given-names: "Mark D."
+      - family-names: "Waugh"
+        given-names: "Ben"
+      - family-names: "White"
+        given-names: "Ethan P."
+      - family-names: "Wilson"
+        given-names: "Paul"
+    title: "Best Practices for Scientific Computing"
+    journal: "PLOS Biology"
+    publisher:
+      name: "Public Library of Science"
+    volume: "12"
+    issue: "1"
+    pages: "1-7"
+    year: 2014
+    doi: "10.1371/journal.pbio.1001745"
+    url: "https://doi.org/10.1371/journal.pbio.1001745"
+    abstract: >
+      We describe a set of best practices for scientific software development,
+      based on research and experience, that will improve scientists' productivity
+      and the reliability of their software.
+  - type: software
+    authors:
+      - name: "The pandas development team"
+    title: "pandas-dev/pandas: Pandas"
+    year: 2020
+    month: 2
+    publisher:
+      name: "Zenodo"
+    version: "latest"
+    doi: "10.5281/zenodo.3509134"
+    url: "https://doi.org/10.5281/zenodo.3509134"
+  - type: conference-paper
+    authors:
+      - family-names: "McKinney"
+        given-names: "Wes"
+    title: "Data Structures for Statistical Computing in Python"
+    conference:
+      name: "Proceedings of the 9th Python in Science Conference"
+    editors:
+      - family-names: "van der Walt"
+        given-names: "Stéfan"
+      - family-names: "Millman"
+        given-names: "Jarrod"
+    pages: "56-61"
+    year: 2010
+    doi: "10.25080/Majora-92bf1922-00a"
+  - type: article
+    authors:
+      - family-names: "Hunter"
+        given-names: "J. D."
+    title: "Matplotlib: A 2D graphics environment"
+    journal: "Computing in Science & Engineering"
+    volume: "9"
+    issue: "3"
+    pages: "90-95"
+    year: 2007
+    publisher:
+      name: "IEEE Computer Society"
+    doi: "10.1109/MCSE.2007.55"
+    abstract: >
+      Matplotlib is a 2D graphics package used for Python for
+      application development, interactive scripting, and
+      publication-quality image generation across user interfaces
+      and operating systems.
