@@ -7,6 +7,7 @@
 
 [![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/snu-hanaro/static-fire-toolkit/issues)
 [![GitHub actions status](https://github.com/snu-hanaro/static-fire-toolkit/workflows/CI/badge.svg)](https://github.com/snu-hanaro/static-fire-toolkit/actions?query=workflow%3ACI)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17218595.svg)](https://doi.org/10.5281/zenodo.17218595)
 
 **HANARO SFT (Static-Fire Toolkit)** is an open-source command-line toolkit developed by the [Seoul National University Rocket Team **HANARO**](https://hanaro.snu.ac.kr/).  
 It provides a standardized workflow for processing **static-fire test data** from amateur and research solid rocket motors, focusing on **data cleaning, performance analysis, burn rate estimation, and visualization**.
@@ -330,6 +331,49 @@ Please use Issues/PRs with templates. Recommended:
 ## Author & Maintainers
 - Author: Seoul National University Rocket Team HANARO
 - Maintainer: [@yunseo-kim](https://github.com/yunseo-kim)
+
+## Citing Static-Fire Toolkit
+
+If *HANARO SFT (Static-Fire Toolkit)* contributes to a project that leads to a scientific publication, please acknowledge this fact by citing [the published software](#static-fire-toolkit-on-zenodo):
+
+### Static-Fire Toolkit on Zenodo
+
+The following DOI represents *all* Static-Fire Toolkit versions.  
+You may cite it directly, or visit [Zenodo]((https://doi.org/10.5281/zenodo.17218595)) to find the DOI of the specific version you used.
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17218595.svg)](https://doi.org/10.5281/zenodo.17218595)
+
+BibTeX bibliography file: [CITATION.bib](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/CITATION.bib)
+
+```
+@software{hanaro-sft,
+  author       = {Kim, Yunseo and
+                  Seo, Jiwan and
+                  Yun, Junghyeon},
+  title        = {Static-Fire Toolkit},
+  month        = sep,
+  year         = 2025,
+  publisher    = {Zenodo},
+  version      = {latest},
+  doi          = {10.5281/zenodo.17218595},
+  url          = {https://doi.org/10.5281/zenodo.17218595},
+}
+```
+
+- **Chicago**: Kim, Yunseo, Jiwan Seo, and Junghyeon Yun. “Static-fire Toolkit”. Zenodo, 2025. https://doi.org/10.5281/zenodo.17218595.
+- **IEEE**: [1] Y. Kim, J. Seoand J. Yun, “Static-Fire Toolkit”. Zenodo, 2025. doi: 10.5281/zenodo.17218595.
+- **ACS**: Kim, Y.; Seo, J.; Yun, J. Static-Fire Toolkit; Zenodo, 2025. https://doi.org/10.5281/zenodo.17218595.
+- **APS**: [1] Y. Kim, J. Seo, and J. Yun, Static-Fire Toolkit (Zenodo, 2025), https://doi.org/10.5281/zenodo.17218595.
+
+#### By version (past releases)
+
+##### v1.0.1
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17218872.svg)](https://doi.org/10.5281/zenodo.17218872)
+
+##### v1.0.0
+
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17218596.svg)](https://doi.org/10.5281/zenodo.17218596)
 
 ## License
 
