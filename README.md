@@ -4,9 +4,11 @@
 [![PyPI Version](https://img.shields.io/pypi/v/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit/)
 [![SemVer Versioning](https://img.shields.io/badge/version_scheme-SemVer-0097a7)](https://semver.org/)
 [![Supported Python versions](https://img.shields.io/pypi/pyversions/static-fire-toolkit)](https://pypi.python.org/pypi/static-fire-toolkit)
-
 [![GitHub issues](https://img.shields.io/badge/issue_tracking-GitHub-blue.svg)](https://github.com/snu-hanaro/static-fire-toolkit/issues)
 [![GitHub actions status](https://github.com/snu-hanaro/static-fire-toolkit/workflows/CI/badge.svg)](https://github.com/snu-hanaro/static-fire-toolkit/actions?query=workflow%3ACI)
+
+[![Pepy Total Downloads](https://img.shields.io/pepy/dt/static-fire-toolkit?label=Downloads%20from%20PyPI)](https://pepy.tech/projects/static-fire-toolkit?timeRange=threeMonths&category=version&includeCIDownloads=true&granularity=daily&viewType=line&versions=1.0.1%2C1.0.0)
+[![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/snu-hanaro/static-fire-toolkit/total?label=Downloads%20from%20GitHub)](https://github.com/snu-hanaro/static-fire-toolkit/releases)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17218595.svg)](https://doi.org/10.5281/zenodo.17218595)
 
 **HANARO SFT (Static-Fire Toolkit)** is an open-source command-line toolkit developed by the [Seoul National University Rocket Team **HANARO**](https://hanaro.snu.ac.kr/).  
