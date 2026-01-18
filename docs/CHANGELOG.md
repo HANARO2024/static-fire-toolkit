@@ -167,4 +167,5 @@ First written by Jiwan Seo (jiwan0216@snu.ac.kr, Project Manager of Hanaro)
 - Export processed results to CSV/graph outputs
 
 [unreleased]: https://github.com/snu-hanaro/static-fire-toolkit/compare/v1.0.0...HEAD
+[1.0.1]: https://github.com/snu-hanaro/static-fire-toolkit/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/snu-hanaro/static-fire-toolkit/releases/tag/v1.0.0
