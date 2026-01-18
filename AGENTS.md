@@ -76,6 +76,7 @@ sft process -> Thrust -> Pressure -> Burnrate
 
 ### Git Strategy
 - **Trunk-based development**: `main` branch protected
+- **NEVER commit directly to `main`**: Always create a feature branch and submit a PR
 - PRs required with CI checks passing
 - Tag format: `v{major}.{minor}.{patch}` (prerelease: `a`, `b`, `rc`)
 - Signed tags by default; annotated tags allowed with `--no-sign`
@@ -337,6 +338,7 @@ Notes:
 ## Prohibited Agent Actions
 
 Agents MUST NOT:
+- **Commit directly to `main` branch** — always use feature branches and PRs
 - Assume or introduce Jira/Trello workflows prematurely
 - Make code or design changes without an ISSUE
 - Make decisions justified only by intuition or preference
