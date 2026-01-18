@@ -67,6 +67,18 @@ sft process -> Thrust -> Pressure -> Burnrate
 ### Python
 - **Ruff** for lint+format. Google docstrings. Target Python 3.10.
 - Run: `ruff check . && ruff format .`
+- Ruff rules: `E1, E2, E4, E7, E9, F, W, UP, B, D` (ignore: `D100, D104, D107`)
+
+### Testing
+- **pytest** with `-q --color=yes`
+- **Coverage** target: 70% minimum (omit `*/__init__.py`)
+- Test path: `tests/`
+
+### Git Strategy
+- **Trunk-based development**: `main` branch protected
+- PRs required with CI checks passing
+- Tag format: `v{major}.{minor}.{patch}` (prerelease: `a`, `b`, `rc`)
+- Signed tags by default; annotated tags allowed with `--no-sign`
 
 ### Config System
 - `global_config.py` in execution root (NOT package) — dynamic Python injection

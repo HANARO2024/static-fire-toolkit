@@ -4,82 +4,13 @@ globs:
 alwaysApply: true
 ---
 
-# ==============================================================================
-# Cursor Rules for HANARO SFT (Static-Fire Toolkit)
-# ==============================================================================
-# 목적:
-#   - 코드 품질 및 포맷 일관성 유지
-#   - trunk-based 개발 및 태그 기반 배포 파이프라인 지원
-#   - PyPI 패키지로 배포되는 파이썬 라이브러리에 적합한 개발 경험 제공
-# ==============================================================================
+# Cursor Rules for HANARO SFT
 
-# ------------------------------------------------------------------------------
-# 린트 & 포맷
-# ------------------------------------------------------------------------------
-lint:
-  ruff:
-    enabled: true
-    targetVersion: "py39"
-    select: ["E1", "E2", "E4", "E7", "E9", "F", "W", "UP", "B", "D"]
-    ignore: ["D100", "D104", "D107"]
-    docstringStyle: "google"
+All project conventions, coding standards, and workflow rules are documented in the authoritative reference:
 
-# ------------------------------------------------------------------------------
-# 테스트
-# ------------------------------------------------------------------------------
-test:
-  pytest:
-    enabled: true
-    addopts: "-q --color=yes"
-    testpaths: ["tests"]
-  coverage:
-    enabled: true
-    failUnder: 70   # 초기에는 70% 기준, 안정화 후 점진적으로 상향
-    omit: ["*/__init__.py"]
-
-# ------------------------------------------------------------------------------
-# Git 브랜치 & 태그
-# ------------------------------------------------------------------------------
-git:
-  strategy: "trunk-based"
-  protectedBranches: ["main"]
-  requirePR: true
-  requireChecks: ["ci"]
-  tags:
-    format: "v{major}.{minor}.{patch}"
-    prerelease: ["a", "b", "rc"]
-    signed: true       # 기본 signed 태그
-    allowAnnotated: true  # --no-sign 옵션 시 annotated 허용
-    messageTemplate: |
-      Static-Fire Toolkit {tag} ({date})
-
-      Summary
-      - Short summary of this release
-
-      Highlights
-      - Key features
-
-      Breaking Changes
-      - List any API changes
-
-      Fixes
-      - Bug fixes
-
-      Docs
-      - Documentation updates
-
-      Thanks
-      - SNU Rocket Team Hanaro contributors
-
-      Artifacts
-      - PyPI: static-fire-toolkit=={version}
-      - Tag: {tag}
-
-# ------------------------------------------------------------------------------
-# Pre-commit Hooks
-# ------------------------------------------------------------------------------
-precommit:
-  enabled: true
-  hooks:
-    - ruff-check
-    - ruff-format
+**See [`AGENTS.md`](../../AGENTS.md)** for:
+- Python conventions (Ruff, docstrings, type hints)
+- Testing requirements (pytest, coverage)
+- Git strategy (trunk-based, tag format)
+- Commit message rules
+- Project structure and code map
