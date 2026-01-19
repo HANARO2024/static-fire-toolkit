@@ -10,10 +10,57 @@ Each entry must include:
 
 ---
 
-## D-2025-09-01: src-layout Package Structure
+## D-2025-01-21: Experiment Configuration in xlsx Format
 
 ```yaml
-DECISION_ID: D-2025-09-01
+DECISION_ID: D-2025-01-21
+DECISION_TYPE: ARCHITECTURE
+```
+
+**DECISION**: Use `config.xlsx` (Excel workbook) for per-experiment configuration instead of `config.ini` or CSV.
+
+**RATIONALE**:
+- **Preserves historical data**: Previously, `config.ini` was overwritten each experiment, losing past parameter values. Recovering old values required searching through chat logs or notes.
+- **Structured record-keeping**: Each experiment gets its own row, enabling systematic tracking of grain/motor parameters (OuterDiameter, InnerDiameter, SingleGrainHeight, TotalMass, Segment) that vary per test.
+- **Batch processing ready**: Row-based structure anticipates future multi-experiment processing.
+- **Encoding stability**: CSV files opened and saved in Excel on Windows often have encoding issues (UTF-8 → CP949/ANSI corruption). xlsx format avoids this problem since it's a binary format with consistent encoding.
+- **Human-editable**: Configuration must be manually entered by operators — xlsx provides a familiar spreadsheet interface.
+
+**ALTERNATIVES**:
+- `config.ini` (rejected: overwrites lose history, no batch capability)
+- CSV (rejected: encoding corruption when edited in Excel on Windows)
+- TOML/YAML (rejected: less familiar to non-developer users)
+
+**REVIEW_TRIGGER**: If automated configuration generation from external systems is required.
+
+---
+
+## D-2025-01-21-B: Generic Configuration Filename
+
+```yaml
+DECISION_ID: D-2025-01-21-B
+DECISION_TYPE: ARCHITECTURE
+```
+
+**DECISION**: Use generic filename `config.xlsx` rather than project-specific names (e.g., `KHAOS_grain.xlsx`).
+
+**RATIONALE**:
+- **Separation of config and code**: When switching projects, users copy the `examples/` directory structure and replace contents. Hardcoded filenames like `KHAOS_grain.xlsx` would require source code edits to change to `Identity3_grain.xlsx`.
+- **Minimize code modifications**: Code changes should be limited to improvements and bug fixes, not per-project customization.
+- **PEP 8 compliance**: Lowercase filename with underscores follows Python naming conventions.
+
+**ALTERNATIVES**:
+- Project-specific filenames (rejected: requires code changes per project)
+- Environment variable for filename (rejected: unnecessary complexity for simple use case)
+
+**REVIEW_TRIGGER**: If multiple config files per project become necessary.
+
+---
+
+## D-2025-09-13: src-layout Package Structure
+
+```yaml
+DECISION_ID: D-2025-09-13
 DECISION_TYPE: ARCHITECTURE
 ```
 
