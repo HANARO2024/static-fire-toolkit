@@ -8,14 +8,14 @@ Each entry must include:
 - **ALTERNATIVES**: Options that were considered but rejected
 - **REVIEW_TRIGGER**: Conditions that would require re-evaluation
 
----
+- - -
 
 ## D-2025-01-21: Experiment Configuration in xlsx Format
 
-```yaml
+---
 DECISION_ID: D-2025-01-21
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Use `config.xlsx` (Excel workbook) for per-experiment configuration instead of `config.ini` or CSV.
 
@@ -33,14 +33,14 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If automated configuration generation from external systems is required.
 
----
+- - -
 
 ## D-2025-01-21-B: Generic Configuration Filename
 
-```yaml
+---
 DECISION_ID: D-2025-01-21-B
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Use generic filename `config.xlsx` rather than project-specific names (e.g., `KHAOS_grain.xlsx`).
 
@@ -55,14 +55,14 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If multiple config files per project become necessary.
 
----
+- - -
 
 ## D-2025-09-13: src-layout Package Structure
 
-```yaml
+---
 DECISION_ID: D-2025-09-13
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Use src-layout (`src/static_fire_toolkit/`) instead of flat layout.
 
@@ -77,14 +77,14 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If monorepo structure is adopted with multiple packages.
 
----
+- - -
 
 ## D-2025-09-01: Dynamic Python Configuration
 
-```yaml
+---
 DECISION_ID: D-2025-09-01-B
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Use `global_config.py` (Python module) for runtime configuration instead of TOML/YAML.
 
@@ -99,14 +99,14 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If configuration needs to be shared with non-Python tools.
 
----
+- - -
 
 ## D-2025-09-15: Sequential Pipeline Architecture
 
-```yaml
+---
 DECISION_ID: D-2025-09-15
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Implement processing as strictly sequential stages: Thrust -> Pressure -> Burnrate.
 
@@ -122,14 +122,14 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If real-time processing requirements emerge.
 
----
+- - -
 
 ## D-2026-01-19: Unified Agent Rules Document
 
-```yaml
+---
 DECISION_ID: D-2026-01-19
 DECISION_TYPE: ARCHITECTURE
-```
+---
 
 **DECISION**: Consolidate all AI agent configuration into single `AGENTS.md` file.
 

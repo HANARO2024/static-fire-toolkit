@@ -245,6 +245,10 @@ REVIEW_TRIGGER:
 
 Agents MUST NOT record conclusions without rationale.
 
+Note:  
+Some decisions are foundational and may not originate from a specific ISSUE.
+RELATED_ISSUES is optional.
+
 ## Experiment Log Rules
 
 All experiments, PoCs, and hypothesis tests MUST be logged in `01_log/experiment-log.md`.
@@ -339,6 +343,7 @@ Notes:
 
 Agents MUST NOT:
 - **Commit directly to `main` branch** — always use feature branches and PRs
+- **Push to remote without explicit user instruction** — local commits are fine, but `git push` requires explicit approval
 - Assume or introduce Jira/Trello workflows prematurely
 - Make code or design changes without an ISSUE
 - Make decisions justified only by intuition or preference
