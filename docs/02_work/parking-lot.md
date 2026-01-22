@@ -26,21 +26,30 @@ PRIORITY: LOW
 
 ---
 
-### TOML Configuration Support
+### TOML Configuration Migration
 
 ```yaml
 ISSUE: P-002
-TYPE: SPIKE
-TITLE: Evaluate TOML as alternative to global_config.py
+TYPE: TASK
+TITLE: Migrate global_config.py to global_config.toml
 STATUS: TODO
-PRIORITY: LOW
+PRIORITY: MEDIUM
+RELATED_DECISIONS:
+  - D-2025-09-16-B
 ```
 
-**OBJECTIVE**: Assess feasibility of TOML configuration for non-Python users.
+**OBJECTIVE**: Replace Python module configuration with TOML format.
 
-**CONTEXT**: Some users may prefer declarative config over Python. However, computed values (e.g., gain calculations) would need special handling.
+**CONTEXT**:
+- Using Python modules for configuration conflates code and data
+- TOML provides clear separation and is human-readable
+- Security concern: Python config allows arbitrary code execution
+- Decided 2026-01-11 to migrate; `global_config.py` to be deprecated but maintained for backward compatibility
+- Current Python module format is technical debt (path dependency from early development)
 
-**NOTES**: See Decision D-2025-09-01-B for current rationale.
+**NOTES**: 
+- Computed values (e.g., gain calculations) need special handling in TOML
+- Must maintain backward compatibility with existing `global_config.py` users
 
 ---
 
@@ -62,37 +71,10 @@ PRIORITY: LOW
 
 ---
 
-### TOML Configuration Migration
-
-```yaml
-ISSUE: P-004
-TYPE: TASK
-TITLE: Migrate global_config.py to global_config.toml
-STATUS: TODO
-PRIORITY: MEDIUM
-RELATED_DECISIONS:
-  - D-2025-09-16-B
-```
-
-**OBJECTIVE**: Replace Python module configuration with TOML format.
-
-**CONTEXT**:
-- Using Python modules for configuration conflates code and data
-- TOML provides clear separation and is human-readable
-- Security concern: Python config allows arbitrary code execution
-- Decided 2026-01-11 to migrate; `global_config.py` to be deprecated but maintained for backward compatibility
-
-**NOTES**: 
-- Computed values (e.g., gain calculations) need special handling in TOML
-- Must maintain backward compatibility with existing `global_config.py` users
-- See P-002 for related discussion on TOML evaluation
-
----
-
 ### Hash-Based Change Detection (Re-implementation)
 
 ```yaml
-ISSUE: P-005
+ISSUE: P-004
 TYPE: TASK
 TITLE: Re-implement SHA256 hash-based data change detection
 STATUS: TODO
@@ -114,7 +96,7 @@ PRIORITY: MEDIUM
 ### Statistical Analysis for Standard Propellant Specs
 
 ```yaml
-ISSUE: P-006
+ISSUE: P-005
 TYPE: TASK
 TITLE: Add statistical processing for repeated experiment data
 STATUS: TODO

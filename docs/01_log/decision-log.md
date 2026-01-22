@@ -516,13 +516,15 @@ DECISION_TYPE: ARCHITECTURE
 **RATIONALE**:
 - Name collision with per-experiment `config.xlsx` caused confusion
 - `global_config.py` clearly indicates scope (runtime/global vs. per-experiment)
-- Long-term consideration: migrate to TOML for clearer separation of code and config (deferred as low priority)
 
 **ALTERNATIVES**:
 - Keep `config.py` with documentation (rejected: collision still confusing)
-- Immediate TOML migration (rejected: lower priority than release)
 
-**REVIEW_TRIGGER**: When TOML migration is implemented (see P-002/P-004).
+**REVIEW_TRIGGER**: When TOML migration is implemented (see P-002).
+
+**NOTES**:
+- Python module format for configuration is technical debt inherited from early development (path dependency)
+- TOML migration planned but deferred — see P-002
 
 **COMMITS**:
 - Renaming handled in config loader refactor: [`dc26641`](https://github.com/snu-hanaro/static-fire-toolkit/commit/dc26641)
