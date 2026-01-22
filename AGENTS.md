@@ -158,6 +158,10 @@ docs/
 │   ├── parking-lot.md
 │   └── done.md
 ├── 03_specs/          # PRD, architecture, specifications
+├── CHANGELOG.md       # User-facing and release-level change history
+├── CODE_OF_CONDUCT.md
+├── logo-banner.png
+├── logo-square.png
 └── README.md
 ```
 
@@ -170,7 +174,7 @@ All work items MUST follow this structure:
 ```yaml
 ---
 ISSUE: A-001
-TYPE: DESIGN | TASK | SPIKE | DOC
+TYPE: DESIGN | TASK | SPIKE | DOCS
 TITLE: Clear and concise title
 STATUS: TODO | IN_PROGRESS | BLOCKED | WAITING | DONE
 ASSIGNEE:
@@ -227,7 +231,7 @@ A decision log entry (`01_log/decision-log.md`) is REQUIRED when:
 DECISION_ID: D-2026-01-14
 RELATED_ISSUES:
   - A-001
-DECISION_TYPE: ARCHITECTURE | SECURITY | PRODUCT
+DECISION_TYPE: ALGORITHM | ARCHITECTURE | PRODUCT
 ---
 
 DECISION:
