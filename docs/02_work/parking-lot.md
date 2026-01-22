@@ -107,3 +107,72 @@ PRIORITY: MEDIUM
 - Requires multiple experiments with controlled variables
 - Output should include mean, standard deviation, confidence intervals
 - Consider visualization of distribution
+
+
+## P-006: Burnrate Animation Output Toggle
+
+---
+ISSUE: P-006
+TYPE: TASK
+TITLE: Add on/off flag for burnrate-pressure GIF animation output
+STATUS: TODO
+PRIORITY: HIGH
+---
+
+**OBJECTIVE**: Add global configuration option to enable/disable GIF animation generation during burnrate analysis.
+
+**CONTEXT**:
+- GIF animation generation is computationally expensive and time-consuming
+- Not always needed for routine analysis
+- Users should be able to skip animation output when only static results are required
+
+**NOTES**:
+- Add `animation_enabled` (or similar) flag to `global_config.py`
+- Default should maintain backward compatibility (enabled by default)
+- Consider CLI override flag (e.g., `--no-animation`)
+
+
+## P-007: Numba JIT Compilation Investigation
+
+---
+ISSUE: P-007
+TYPE: SPIKE
+TITLE: Investigate Numba for performance optimization
+STATUS: TODO
+PRIORITY: MEDIUM
+---
+
+**OBJECTIVE**: Evaluate Numba JIT compilation for compute-intensive routines.
+
+**CONTEXT**:
+- RK4 solver and curve fitting are potential bottlenecks
+- Numba can provide significant speedup for numerical code
+- Need to assess compatibility with existing NumPy/SciPy usage
+
+**NOTES**:
+- Benchmark current performance first
+- Identify hotspots via profiling
+- Consider maintenance burden vs. performance gain
+
+
+## P-008: uv Package Manager Migration
+
+---
+ISSUE: P-008
+TYPE: SPIKE
+TITLE: Investigate uv as pip/venv replacement
+STATUS: TODO
+PRIORITY: MEDIUM
+---
+
+**OBJECTIVE**: Evaluate uv for faster dependency resolution and environment management.
+
+**CONTEXT**:
+- uv is a fast Python package installer written in Rust
+- Potential benefits: faster installs, lockfile support, unified tooling
+- Need to assess compatibility with current CI/CD and PyPI workflows
+
+**NOTES**:
+- Compare installation speed vs. pip
+- Check compatibility with pyproject.toml
+- Evaluate impact on contributor onboarding
