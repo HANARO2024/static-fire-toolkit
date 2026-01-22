@@ -76,6 +76,7 @@ sft process -> Thrust -> Pressure -> Burnrate
 
 ### Git Strategy
 - **Trunk-based development**: `main` branch protected
+- **NEVER commit directly to `main`**: Always create a feature branch and submit a PR
 - PRs required with CI checks passing
 - Tag format: `v{major}.{minor}.{patch}` (prerelease: `a`, `b`, `rc`)
 - Signed tags by default; annotated tags allowed with `--no-sign`
@@ -157,6 +158,10 @@ docs/
 │   ├── parking-lot.md
 │   └── done.md
 ├── 03_specs/          # PRD, architecture, specifications
+├── CHANGELOG.md       # User-facing and release-level change history
+├── CODE_OF_CONDUCT.md
+├── logo-banner.png
+├── logo-square.png
 └── README.md
 ```
 
@@ -169,7 +174,7 @@ All work items MUST follow this structure:
 ```yaml
 ---
 ISSUE: A-001
-TYPE: DESIGN | TASK | SPIKE | DOC
+TYPE: DESIGN | TASK | SPIKE | DOCS
 TITLE: Clear and concise title
 STATUS: TODO | IN_PROGRESS | BLOCKED | WAITING | DONE
 ASSIGNEE:
@@ -226,7 +231,7 @@ A decision log entry (`01_log/decision-log.md`) is REQUIRED when:
 DECISION_ID: D-2026-01-14
 RELATED_ISSUES:
   - A-001
-DECISION_TYPE: ARCHITECTURE | SECURITY | PRODUCT
+DECISION_TYPE: ALGORITHM | ARCHITECTURE | PRODUCT
 ---
 
 DECISION:
@@ -243,6 +248,10 @@ REVIEW_TRIGGER:
 ```
 
 Agents MUST NOT record conclusions without rationale.
+
+Note:  
+Some decisions are foundational and may not originate from a specific ISSUE.
+RELATED_ISSUES is optional.
 
 ## Experiment Log Rules
 
@@ -337,6 +346,8 @@ Notes:
 ## Prohibited Agent Actions
 
 Agents MUST NOT:
+- **Commit directly to `main` branch** — always use feature branches and PRs
+- **Push to remote without explicit user instruction** — local commits are fine, but `git push` requires explicit approval
 - Assume or introduce Jira/Trello workflows prematurely
 - Make code or design changes without an ISSUE
 - Make decisions justified only by intuition or preference

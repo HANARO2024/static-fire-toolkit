@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   This ensures consistency between `pyproject.toml` and runtime `__version__`, preventing version mismatches in future releases.
 - Fix broken PyPI download badge in `README.md` (remove deprecated `pypi/dm` badge)
 
+### References (for maintainers)
+- Decision: [D-2025-09-19](./01_log/decision-log.md#d-2025-09-19-version-single-source-of-truth) (Version Single Source of Truth)
+
 ## [1.0.0] - 2025-09-19
 
 ### Added
@@ -78,6 +81,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Adopt ruff as linter and formatter
 - Add project-level Cursor rule sets, ensuring consistency when using AI-based tools like Cursor IDE
 
+### References (for maintainers)
+- Decision: [D-2025-05-06](./01_log/decision-log.md#d-2025-05-06-open-source-release-and-public-distribution) (Open Source Release)
+- Decision: [D-2025-09-03](./01_log/decision-log.md#d-2025-09-03-trunk-based-development-strategy) (Trunk-Based Development)
+- Decision: [D-2025-09-13-A](./01_log/decision-log.md#d-2025-09-13-a-project-naming) (Project Naming)
+- Decision: [D-2025-09-13-B](./01_log/decision-log.md#d-2025-09-13-b-src-layout-package-structure) (src-layout)
+- Decision: [D-2025-09-13-C](./01_log/decision-log.md#d-2025-09-13-c-pypi-package-distribution) (PyPI Distribution)
+- Decision: [D-2025-09-14](./01_log/decision-log.md#d-2025-09-14-ruff-as-linter-and-formatter) (Ruff Linter)
+- Decision: [D-2025-09-15-A](./01_log/decision-log.md#d-2025-09-15-a-tag-release-helper-script) (Tag Release Script)
+- Decision: [D-2025-09-15-B](./01_log/decision-log.md#d-2025-09-15-b-ai-development-tool-guidelines) (AI Tool Guidelines)
+- Decision: [D-2025-09-15-C](./01_log/decision-log.md#d-2025-09-15-c-remove-wildcard-imports) (Remove Wildcard Imports)
+- Decision: [D-2025-09-15-D](./01_log/decision-log.md#d-2025-09-15-d-unified-io-directory-structure) (Unified I/O Structure)
+- Decision: [D-2025-09-16-A](./01_log/decision-log.md#d-2025-09-16-a-cli-interface-introduction) (CLI Interface)
+- Decision: [D-2025-09-16-B](./01_log/decision-log.md#d-2025-09-16-b-rename-runtime-config-from-configpy-to-global_configpy) (Config Rename)
+- Decision: [D-2025-09-17](./01_log/decision-log.md#d-2025-09-17-lazy-import-optimization) (Lazy Import)
+- Decision: [D-2025-09-18-A](./01_log/decision-log.md#d-2025-09-18-a-configurable-csv-delimiters-and-headers) (CSV Config)
+- Decision: [D-2025-09-18-B](./01_log/decision-log.md#d-2025-09-18-b-parameterized-load-cell-conversion) (Load Cell Params)
+- Parking Lot: [P-004](./02_work/parking-lot.md#p-004-hash-based-change-detection-re-implementation) (Hash-based detection lost in v1.0.0 restructuring)
+
 ## 0.6.0 - 2025-04-06
 Updated by Yunseo Kim (yunseo@snu.ac.kr)
 
@@ -125,6 +146,9 @@ Updated by Yunseo Kim (yunseo@snu.ac.kr)
 ### Fixed
 - To avoid file I/O errors based on the execution environment or current working directory, set the file paths to absolute paths using the OS module
 
+### References (for maintainers)
+- Decision: [D-2025-01-22](./01_log/decision-log.md#d-2025-01-22-absolute-path-handling-for-file-io) (Absolute Path Handling)
+
 ## 0.3.0 - 2025-02-08
 
 Updated by Yunseo Kim (yunseo@snu.ac.kr)
@@ -141,6 +165,10 @@ Updated by Yunseo Kim (yunseo@snu.ac.kr)
 
 - Check and resolve the part where the deprecation warnings were occurring
 
+### References (for maintainers)
+- Experiment: [E-2025-01-18](./01_log/experiment-log.md#e-2025-01-18-duplicate-timestamp-handling-methods) (Duplicate Timestamp Handling Methods)
+- Decision: [D-2025-01-18](./01_log/decision-log.md#d-2025-01-18-duplicate-timestamp-handling-in-thrust-data) (Duplicate Timestamp Handling)
+
 ## 0.2.0 - 2025-01-22
 
 Updated by Yunseo Kim (yunseo@snu.ac.kr)
@@ -155,6 +183,12 @@ Updated by Yunseo Kim (yunseo@snu.ac.kr)
 - Improve the interpolation algorithm from CubicSpline to PCHIP
 - Change output format from .txt(sep=' ') to .csv(sep=',')
 - Separate items that vary per test into a config.xlsx file distinct from config.py
+
+### References (for maintainers)
+- Experiment: [E-2025-01-19](./01_log/experiment-log.md#e-2025-01-19-pchip-vs-cubic-spline-for-resampling) (PCHIP vs Cubic Spline for Resampling)
+- Experiment: [E-2025-01-20](./01_log/experiment-log.md#e-2025-01-20-rk4-vs-euler-for-burn-rate-integration) (RK4 vs Euler for Burn Rate Integration)
+- Decision: [D-2025-01-21-A](./01_log/decision-log.md#d-2025-01-21-a-experiment-configuration-in-xlsx-format) (Experiment Configuration in xlsx Format)
+- Decision: [D-2025-01-21-B](./01_log/decision-log.md#d-2025-01-21-b-generic-configuration-filename) (Generic Configuration Filename)
 
 ## 0.1.0 - 2024-06-18
 
