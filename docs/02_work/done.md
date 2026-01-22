@@ -58,3 +58,25 @@ COMPLETED_AT: 2026-01-19
 - `AGENTS.md` with PROJECT KNOWLEDGE BASE + WORKFLOW CONTRACT
 - `CLAUDE.md` and `.cursor/rules/hanaro-sft.mdc` redirects
 - PR #35 merged
+
+---
+
+## A-004: Documentation Backfill and Records Alignment
+
+```yaml
+ISSUE: A-004
+TYPE: DOCS
+TITLE: Consolidate historical documentation and release references
+STATUS: DONE
+COMPLETED_AT: 2026-01-23
+```
+
+**OBJECTIVE**: Consolidate historical decisions/experiments and align release references with project documentation.
+
+**OUTPUT**:
+- `docs/CHANGELOG.md` references added for releases with related logs
+- `docs/01_log/decision-log.md` backfill and DECISION_TYPE corrections
+- `docs/01_log/experiment-log.md` backfill entries aligned with releases
+- `docs/02_work/parking-lot.md` items added for animation toggle, numba, uv
+- `docs/03_specs/architecture.md` diagram alignment cleanup
+- `AGENTS.md` updates for structure and type definitions
