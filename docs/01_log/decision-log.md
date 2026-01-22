@@ -62,7 +62,7 @@ DECISION_TYPE: ARCHITECTURE
 
 ---
 DECISION_ID: D-2025-01-18
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: When duplicate timestamps are detected in input data, average the corresponding thrust values and log a warning.
@@ -571,7 +571,7 @@ DECISION_TYPE: ARCHITECTURE
 
 ---
 DECISION_ID: D-2025-09-20-A
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: Replace weak Gaussian filter with Savitzky-Golay filter for thrust data smoothing.
@@ -596,7 +596,7 @@ DECISION_TYPE: ARCHITECTURE
 
 ---
 DECISION_ID: D-2025-09-20-B
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: Replace `lfilter` (forward IIR) with `sosfiltfilt` (zero-phase, bidirectional) for low-pass filtering.
@@ -618,7 +618,7 @@ DECISION_TYPE: ARCHITECTURE
 
 ---
 DECISION_ID: D-2025-09-20-C
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: Apply low-pass filter before PCHIP resampling (previously reversed).
@@ -665,7 +665,7 @@ DECISION_TYPE: PRODUCT
 
 ---
 DECISION_ID: D-2025-09-21-A
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: Add maximum-value-ratio threshold to combustion window detection, combined with existing gradient criteria.
@@ -688,7 +688,7 @@ DECISION_TYPE: ARCHITECTURE
 
 ---
 DECISION_ID: D-2025-09-21-B
-DECISION_TYPE: ARCHITECTURE
+DECISION_TYPE: ALGORITHM
 ---
 
 **DECISION**: Extend boundary search with configurable window to handle multi-peak combustion (e.g., chuffing).
