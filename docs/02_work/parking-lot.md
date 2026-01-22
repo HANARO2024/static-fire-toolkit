@@ -4,19 +4,16 @@ This file contains deferred, undecided, or low-priority work items.
 
 Items here are not actively being worked on but may be promoted to `active.md` in the future.
 
+
+## P-001: Batch Processing Mode
+
 ---
-
-## Future Enhancements
-
-### Batch Processing Mode
-
-```yaml
 ISSUE: P-001
 TYPE: TASK
 TITLE: Add batch processing for multiple experiments
 STATUS: TODO
-PRIORITY: LOW
-```
+PRIORITY: MEDIUM
+---
 
 **OBJECTIVE**: Allow processing multiple experiments in a single command.
 
@@ -24,19 +21,18 @@ PRIORITY: LOW
 
 **NOTES**: Consider `sft process --all` or date range filtering.
 
+
+## P-002: TOML Configuration Migration
+
 ---
-
-### TOML Configuration Migration
-
-```yaml
 ISSUE: P-002
 TYPE: TASK
 TITLE: Migrate global_config.py to global_config.toml
 STATUS: TODO
-PRIORITY: MEDIUM
+PRIORITY: HIGH
 RELATED_DECISIONS:
   - D-2025-09-16-B
-```
+---
 
 **OBJECTIVE**: Replace Python module configuration with TOML format.
 
@@ -51,17 +47,16 @@ RELATED_DECISIONS:
 - Computed values (e.g., gain calculations) need special handling in TOML
 - Must maintain backward compatibility with existing `global_config.py` users
 
+
+## P-003: Real-time Preview Mode
+
 ---
-
-### Real-time Preview Mode
-
-```yaml
 ISSUE: P-003
 TYPE: SPIKE
 TITLE: Investigate real-time data preview during acquisition
 STATUS: TODO
 PRIORITY: LOW
-```
+---
 
 **OBJECTIVE**: Explore feasibility of live plotting during data acquisition.
 
@@ -69,17 +64,16 @@ PRIORITY: LOW
 
 **NOTES**: Would require significant architecture changes.
 
+
+## P-004: Hash-Based Change Detection (Re-implementation)
+
 ---
-
-### Hash-Based Change Detection (Re-implementation)
-
-```yaml
 ISSUE: P-004
 TYPE: TASK
 TITLE: Re-implement SHA256 hash-based data change detection
 STATUS: TODO
-PRIORITY: MEDIUM
-```
+PRIORITY: HIGH
+---
 
 **OBJECTIVE**: Restore hash-based change detection for batch processing.
 
@@ -91,17 +85,16 @@ PRIORITY: MEDIUM
 
 **NOTES**: Consider whether to store hashes in separate directory or metadata file.
 
+
+## P-005: Statistical Analysis for Standard Propellant Specs
+
 ---
-
-### Statistical Analysis for Standard Propellant Specs
-
-```yaml
 ISSUE: P-005
 TYPE: TASK
 TITLE: Add statistical processing for repeated experiment data
 STATUS: TODO
-PRIORITY: LOW
-```
+PRIORITY: MEDIUM
+---
 
 **OBJECTIVE**: Compute standard specifications (mean, confidence intervals, error bounds) from repeated tests of same propellant.
 

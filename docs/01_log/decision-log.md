@@ -8,143 +8,6 @@ Each entry must include:
 - **ALTERNATIVES**: Options that were considered but rejected
 - **REVIEW_TRIGGER**: Conditions that would require re-evaluation
 
-- - -
-
-## D-2024-12-29: Sequential Pipeline Architecture
-
----
-DECISION_ID: D-2025-09-15
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Implement processing as strictly sequential stages: Thrust -> Pressure -> Burnrate.
-
-**RATIONALE**:
-- Each stage depends on outputs from the previous stage
-- Pressure windowing requires processed thrust data
-- Burnrate analysis requires synchronized pressure data
-- Simplifies debugging and intermediate inspection
-
-**ALTERNATIVES**:
-- Parallel processing (rejected: data dependencies prevent true parallelism)
-- Single monolithic function (rejected: harder to debug and extend)
-
-**REVIEW_TRIGGER**: If real-time processing requirements emerge.
-
-- - -
-
-## D-2025-01-21: Experiment Configuration in xlsx Format
-
----
-DECISION_ID: D-2025-01-21
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Use `config.xlsx` (Excel workbook) for per-experiment configuration instead of `config.ini` or CSV.
-
-**RATIONALE**:
-- **Preserves historical data**: Previously, `config.ini` was overwritten each experiment, losing past parameter values. Recovering old values required searching through chat logs or notes.
-- **Structured record-keeping**: Each experiment gets its own row, enabling systematic tracking of grain/motor parameters (OuterDiameter, InnerDiameter, SingleGrainHeight, TotalMass, Segment) that vary per test.
-- **Batch processing ready**: Row-based structure anticipates future multi-experiment processing.
-- **Encoding stability**: CSV files opened and saved in Excel on Windows often have encoding issues (UTF-8 → CP949/ANSI corruption). xlsx format avoids this problem since it's a binary format with consistent encoding.
-- **Human-editable**: Configuration must be manually entered by operators — xlsx provides a familiar spreadsheet interface.
-
-**ALTERNATIVES**:
-- `config.ini` (rejected: overwrites lose history, no batch capability)
-- CSV (rejected: encoding corruption when edited in Excel on Windows)
-- TOML/YAML (rejected: less familiar to non-developer users)
-
-**REVIEW_TRIGGER**: If automated configuration generation from external systems is required.
-
-- - -
-
-## D-2025-01-21-B: Generic Configuration Filename
-
----
-DECISION_ID: D-2025-01-21-B
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Use generic filename `config.xlsx` rather than project-specific names (e.g., `KHAOS_grain.xlsx`).
-
-**RATIONALE**:
-- **Separation of config and code**: When switching projects, users copy the `examples/` directory structure and replace contents. Hardcoded filenames like `KHAOS_grain.xlsx` would require source code edits to change to `Identity3_grain.xlsx`.
-- **Minimize code modifications**: Code changes should be limited to improvements and bug fixes, not per-project customization.
-- **PEP 8 compliance**: Lowercase filename with underscores follows Python naming conventions.
-
-**ALTERNATIVES**:
-- Project-specific filenames (rejected: requires code changes per project)
-- Environment variable for filename (rejected: unnecessary complexity for simple use case)
-
-**REVIEW_TRIGGER**: If multiple config files per project become necessary.
-
-- - -
-
-## D-2025-09-13: src-layout Package Structure
-
----
-DECISION_ID: D-2025-09-13
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Use src-layout (`src/static_fire_toolkit/`) instead of flat layout.
-
-**RATIONALE**:
-- Prevents accidental imports from project root during development
-- Ensures installed package behavior matches development behavior
-- Aligns with modern Python packaging best practices (PEP 621)
-
-**ALTERNATIVES**:
-- Flat layout (rejected: import confusion during development)
-- Namespace packages (rejected: unnecessary complexity for single package)
-
-**REVIEW_TRIGGER**: If monorepo structure is adopted with multiple packages.
-
-- - -
-
-## D-2025-09-16: Rename Python Module for Runtime Configuration from `config.py` to `global_config.py`
-
----
-DECISION_ID: D-2025-09-16
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Use `global_config.py` (Python module) for runtime configuration instead of TOML/YAML.
-
-**RATIONALE**:
-- Allows Python expressions (e.g., gain calculations based on resistance values)
-- Users can import and extend configuration programmatically
-- No additional parsing dependencies required
-
-**ALTERNATIVES**:
-- TOML configuration (rejected: cannot express computed values)
-- Environment variables (rejected: poor UX for complex multi-parameter config)
-
-**REVIEW_TRIGGER**: If configuration needs to be shared with non-Python tools.
-
-- - -
-
-## D-2026-01-19: Unified Agent Rules Document
-
----
-DECISION_ID: D-2026-01-19
-DECISION_TYPE: ARCHITECTURE
----
-
-**DECISION**: Consolidate all AI agent configuration into single `AGENTS.md` file.
-
-**RATIONALE**:
-- Single source of truth prevents inconsistencies
-- Reduces maintenance burden across multiple config files
-- AI agents load fewer files, reducing context fragmentation
-
-**ALTERNATIVES**:
-- Multiple specialized files (rejected: sync burden, duplication risk)
-- Embedded in code comments (rejected: not discoverable by agents)
-
-**REVIEW_TRIGGER**: If AGENTS.md exceeds 600 lines or tool-specific rules diverge significantly.
-
-- - -
 
 ## D-2024-10-22: Burn Rate Analysis Module Development
 
@@ -172,7 +35,28 @@ DECISION_TYPE: PRODUCT
 - Nakka spreadsheet reproduction verified: 2025-01-01
 - RK4/Simpson rule improvements: 2025-01-20
 
-- - -
+
+## D-2024-12-29: Sequential Pipeline Architecture
+
+---
+DECISION_ID: D-2024-12-29
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Implement processing as strictly sequential stages: Thrust -> Pressure -> Burnrate.
+
+**RATIONALE**:
+- Each stage depends on outputs from the previous stage
+- Pressure windowing requires processed thrust data
+- Burnrate analysis requires synchronized pressure data
+- Simplifies debugging and intermediate inspection
+
+**ALTERNATIVES**:
+- Parallel processing (rejected: data dependencies prevent true parallelism)
+- Single monolithic function (rejected: harder to debug and extend)
+
+**REVIEW_TRIGGER**: If real-time processing requirements emerge.
+
 
 ## D-2025-01-18: Duplicate Timestamp Handling in Thrust Data
 
@@ -185,7 +69,7 @@ DECISION_TYPE: ARCHITECTURE
 
 **RATIONALE**:
 - After DAQ replacement (NI LabView → Arduino/pySerial), intermittent timestamp resolution degradation observed (up to 16ms delays)
-- Root cause: Python <3.7 on Windows had known time resolution issues
+- Root cause: Python `<3.7` on Windows had known time resolution issues
 - Two approaches tested:
   1. Average thrust values at duplicate timestamps
   2. Redistribute timestamps via linspace assuming uniform degradation
@@ -198,12 +82,56 @@ DECISION_TYPE: ARCHITECTURE
 - Reject data with duplicates (rejected: loses valuable test data)
 - Ignore duplicates (rejected: causes interpolation errors)
 
-**REVIEW_TRIGGER**: If DAQ provides microsecond-resolution timestamps consistently.
+**REVIEW_TRIGGER**: If a better method for handling duplicate timestamps is discovered.
 
 **COMMITS**:
 - Implemented in v0.3.0+
 
-- - -
+
+## D-2025-01-21-A: Experiment Configuration in xlsx Format
+
+---
+DECISION_ID: D-2025-01-21-A
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Use `config.xlsx` (Excel workbook) for per-experiment configuration instead of `config.ini` or CSV.
+
+**RATIONALE**:
+- **Preserves historical data**: Previously, `config.ini` was overwritten each experiment, losing past parameter values. Recovering old values required searching through chat logs or notes.
+- **Structured record-keeping**: Each experiment gets its own row, enabling systematic tracking of grain/motor parameters (OuterDiameter, InnerDiameter, SingleGrainHeight, TotalMass, Segment) that vary per test.
+- **Batch processing ready**: Row-based structure anticipates future multi-experiment processing.
+- **Encoding stability**: CSV files opened and saved in Excel on Windows often have encoding issues (UTF-8 → CP949/ANSI corruption). xlsx format avoids this problem since it's a binary format with consistent encoding.
+- **Human-editable**: Configuration must be manually entered by operators — xlsx provides a familiar spreadsheet interface.
+
+**ALTERNATIVES**:
+- `config.ini` (rejected: overwrites lose history, no batch capability)
+- CSV (rejected: encoding corruption when edited in Excel on Windows)
+- TOML/YAML (rejected: less familiar to non-developer users)
+
+**REVIEW_TRIGGER**: If automated configuration generation from external systems is required.
+
+
+## D-2025-01-21-B: Generic Configuration Filename
+
+---
+DECISION_ID: D-2025-01-21-B
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Use generic filename `config.xlsx` rather than project-specific names (e.g., `KHAOS_grain.xlsx`).
+
+**RATIONALE**:
+- **Separation of config and code**: When switching projects, users copy the `examples/` directory structure and replace contents. Hardcoded filenames like `KHAOS_grain.xlsx` would require source code edits to change to `Identity3_grain.xlsx`.
+- **Minimize code modifications**: Code changes should be limited to improvements and bug fixes, not per-project customization.
+- **PEP 8 compliance**: Lowercase filename with underscores follows Python naming conventions.
+
+**ALTERNATIVES**:
+- Project-specific filenames (rejected: requires code changes per project)
+- Environment variable for filename (rejected: unnecessary complexity for simple use case)
+
+**REVIEW_TRIGGER**: If multiple config files per project become necessary.
+
 
 ## D-2025-01-22: Absolute Path Handling for File I/O
 
@@ -229,7 +157,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Applied from v0.4.0+
 
-- - -
 
 ## D-2025-05-06: Open Source Release and Public Distribution
 
@@ -260,7 +187,6 @@ DECISION_TYPE: PRODUCT
 - Repository created: 2025-09-13
 - v1.0.0 PyPI release: [`8220dc3`](https://github.com/snu-hanaro/static-fire-toolkit/commit/8220dc3)
 
-- - -
 
 ## D-2025-09-03: Trunk-Based Development Strategy
 
@@ -293,7 +219,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Branch protection configured: 2025-09-13
 
-- - -
 
 ## D-2025-09-13-A: Project Naming
 
@@ -319,12 +244,32 @@ DECISION_TYPE: PRODUCT
 **COMMITS**:
 - Logo and naming: [`404d0d6`](https://github.com/snu-hanaro/static-fire-toolkit/commit/404d0d6)
 
-- - -
 
-## D-2025-09-13-B: PyPI Package Distribution
+## D-2025-09-13-B: src-layout Package Structure
 
 ---
 DECISION_ID: D-2025-09-13-B
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Use src-layout (`src/static_fire_toolkit/`) instead of flat layout.
+
+**RATIONALE**:
+- Prevents accidental imports from project root during development
+- Ensures installed package behavior matches development behavior
+- Aligns with modern Python packaging best practices (PEP 621)
+
+**ALTERNATIVES**:
+- Flat layout (rejected: import confusion during development)
+- Namespace packages (rejected: unnecessary complexity for single package)
+
+**REVIEW_TRIGGER**: If monorepo structure is adopted with multiple packages.
+
+
+## D-2025-09-13-C: PyPI Package Distribution
+
+---
+DECISION_ID: D-2025-09-13-C
 DECISION_TYPE: ARCHITECTURE
 ---
 
@@ -344,7 +289,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - `pyproject.toml` created: [`470fe36`](https://github.com/snu-hanaro/static-fire-toolkit/commit/470fe36)
 
-- - -
 
 ## D-2025-09-14: Ruff as Linter and Formatter
 
@@ -370,7 +314,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Pre-commit + Ruff setup: [`c12e09b`](https://github.com/snu-hanaro/static-fire-toolkit/commit/c12e09b)
 
-- - -
 
 ## D-2025-09-15-A: Tag Release Helper Script
 
@@ -395,7 +338,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Script added: [`6728d91`](https://github.com/snu-hanaro/static-fire-toolkit/commit/6728d91)
 
-- - -
 
 ## D-2025-09-15-B: AI Development Tool Guidelines
 
@@ -421,7 +363,6 @@ DECISION_TYPE: ARCHITECTURE
 - Rules added: [`a7d6998`](https://github.com/snu-hanaro/static-fire-toolkit/commit/a7d6998)
 - Superseded by: [`AGENTS.md`](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/AGENTS.md) (D-2026-01-19)
 
-- - -
 
 ## D-2025-09-15-C: Remove Wildcard Imports
 
@@ -446,7 +387,7 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Wildcard removal: [`dc26641`](https://github.com/snu-hanaro/static-fire-toolkit/commit/dc26641)
 
-- - -
+---
 
 ## D-2025-09-15-D: Unified I/O Directory Structure
 
@@ -471,7 +412,7 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Path unification: [`383313d`](https://github.com/snu-hanaro/static-fire-toolkit/commit/383313d)
 
-- - -
+---
 
 ## D-2025-09-16-A: CLI Interface Introduction
 
@@ -502,7 +443,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - CLI introduction: [`d273649`](https://github.com/snu-hanaro/static-fire-toolkit/commit/d273649)
 
-- - -
 
 ## D-2025-09-16-B: Rename Runtime Config from `config.py` to `global_config.py`
 
@@ -520,16 +460,15 @@ DECISION_TYPE: ARCHITECTURE
 **ALTERNATIVES**:
 - Keep `config.py` with documentation (rejected: collision still confusing)
 
-**REVIEW_TRIGGER**: When TOML migration is implemented (see P-002).
+**REVIEW_TRIGGER**: When TOML migration is implemented (see [P-002](../02_work/parking-lot.md#p-002-toml-configuration-migration)).
 
 **NOTES**:
 - Python module format for configuration is technical debt inherited from early development (path dependency)
-- TOML migration planned but deferred — see P-002
+- TOML migration planned but deferred — see [P-002](../02_work/parking-lot.md#p-002-toml-configuration-migration)
 
 **COMMITS**:
 - Renaming handled in config loader refactor: [`dc26641`](https://github.com/snu-hanaro/static-fire-toolkit/commit/dc26641)
 
-- - -
 
 ## D-2025-09-17: Lazy Import Optimization
 
@@ -554,7 +493,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Lazy import optimization: [`15d2003`](https://github.com/snu-hanaro/static-fire-toolkit/commit/15d2003)
 
-- - -
 
 ## D-2025-09-18-A: Configurable CSV Delimiters and Headers
 
@@ -579,7 +517,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Sep/header configuration: [`1b1ce20`](https://github.com/snu-hanaro/static-fire-toolkit/commit/1b1ce20)
 
-- - -
 
 ## D-2025-09-18-B: Parameterized Load Cell Conversion
 
@@ -605,7 +542,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Mandatory load cell params: [`bba59fa`](https://github.com/snu-hanaro/static-fire-toolkit/commit/bba59fa)
 
-- - -
 
 ## D-2025-09-19: Version Single Source of Truth
 
@@ -630,7 +566,6 @@ DECISION_TYPE: ARCHITECTURE
 **COMMITS**:
 - Dynamic version fix in v1.0.1 hotfix: [`23e3c0a`](https://github.com/snu-hanaro/static-fire-toolkit/commit/23e3c0a)
 
-- - -
 
 ## D-2025-09-20-A: Savitzky-Golay Filter for Thrust Smoothing
 
@@ -656,7 +591,6 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If signal characteristics change significantly with new DAQ systems.
 
-- - -
 
 ## D-2025-09-20-B: Zero-Phase Butterworth Filter
 
@@ -679,7 +613,6 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If computational cost becomes concern for real-time applications.
 
-- - -
 
 ## D-2025-09-20-C: LPF Before Resampling
 
@@ -701,7 +634,6 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: N/A — this is signal processing fundamentals.
 
-- - -
 
 ## D-2025-09-20-D: Zenodo DOI Assignment
 
@@ -728,7 +660,6 @@ DECISION_TYPE: PRODUCT
 - Zenodo integration: 2025-09-28
 - Citation files: [`40a58ed`](https://github.com/snu-hanaro/static-fire-toolkit/commit/40a58ed)
 
-- - -
 
 ## D-2025-09-21-A: Combustion Window Detection - Threshold Criteria
 
@@ -752,7 +683,6 @@ DECISION_TYPE: ARCHITECTURE
 
 **REVIEW_TRIGGER**: If propulsion engineering community establishes different standard criteria.
 
-- - -
 
 ## D-2025-09-21-B: Multi-Peak Combustion Window Handling
 
@@ -774,3 +704,24 @@ DECISION_TYPE: ARCHITECTURE
 - Manual boundary specification (rejected: not scalable, defeats automation purpose)
 
 **REVIEW_TRIGGER**: If unstable combustion patterns become more varied than current window approach handles.
+
+
+## D-2026-01-19: Unified Agent Rules Document
+
+---
+DECISION_ID: D-2026-01-19
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Consolidate all AI agent configuration into single `AGENTS.md` file.
+
+**RATIONALE**:
+- Single source of truth prevents inconsistencies
+- Reduces maintenance burden across multiple config files
+- AI agents load fewer files, reducing context fragmentation
+
+**ALTERNATIVES**:
+- Multiple specialized files (rejected: sync burden, duplication risk)
+- Embedded in code comments (rejected: not discoverable by agents)
+
+**REVIEW_TRIGGER**: If AGENTS.md exceeds 600 lines or tool-specific rules diverge significantly.
