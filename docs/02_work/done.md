@@ -80,3 +80,24 @@ COMPLETED_AT: 2026-01-23
 - `docs/02_work/parking-lot.md` items added for animation toggle, numba, uv
 - `docs/03_specs/architecture.md` diagram alignment cleanup
 - `AGENTS.md` updates for structure and type definitions
+
+---
+
+## A-005: Past Issues Alignment Review
+
+```yaml
+ISSUE: A-005
+TYPE: DOCS
+TITLE: Align docs/ with past-issues-temp.md findings
+STATUS: DONE
+COMPLETED_AT: 2026-02-07
+```
+
+**OBJECTIVE**: Cross-reference `docs/past-issues-temp.md` against formal `docs/` documents and fix any gaps or errors.
+
+**OUTPUT**:
+- `docs/01_log/decision-log.md`: Added D-2026-01-11 (TOML Migration) entry
+- `docs/02_work/parking-lot.md`: Added D-2026-01-11 cross-reference to P-002
+- `docs/CHANGELOG.md`: Added Zenodo DOI to `[Unreleased]` section
+- `docs/03_specs/architecture.md`: Fixed 3 incorrect Decision ID references (PR #38)
+- PR #37, PR #38 merged

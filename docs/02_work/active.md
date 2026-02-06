@@ -4,33 +4,60 @@ This file tracks work currently in progress. Each item uses the structured ISSUE
 
 ---
 
-## A-005: Past Issues Alignment Review
+## A-006: Docs & Project Asset Restructuring
 
 ```yaml
-ISSUE: A-005
-TYPE: DOCS
-TITLE: Align docs/ with past-issues-temp.md findings
+ISSUE: A-006
+TYPE: TASK
+TITLE: Docs & project asset restructuring
 STATUS: IN_PROGRESS
 ASSIGNEE: AI Agent (Sisyphus)
 PRIORITY: MEDIUM
 RELATED_DOCS:
-  - docs/past-issues-temp.md
-  - docs/01_log/decision-log.md
-  - docs/02_work/parking-lot.md
-  - docs/CHANGELOG.md
+  - README.md
+  - docs/img/
+  - .claude/skills/
 ```
 
 **OBJECTIVE**:
-  - Cross-reference `docs/past-issues-temp.md` against formal `docs/` documents and fix any gaps or errors
+  - Restructure project assets: move images to `docs/img/`, update references, add documentation sections, and register AI skill definitions
 
 **CONTEXT**:
-  - `past-issues-temp.md` contains the canonical history of project issues and decisions in informal format
-  - Formal docs (`decision-log.md`, `CHANGELOG.md`, `parking-lot.md`) should reflect all items from this source
-  - Review identified two gaps: missing D-2026-01-11 decision log entry and missing Zenodo DOI in CHANGELOG `[Unreleased]`
+  - Logo and diagram images scattered under `docs/` root need consolidation into `docs/img/`
+  - README lacks a "Specs & Issue Tracking" section pointing to `docs/`
+  - `.claude/skills/` files define AI agent skill configurations for the project
+  - IAC paper PDF to be archived under `docs/`
 
 **NEXT_ACTIONS**:
-  - PR #37 under review — merge upon approval
-  - After merge, move this issue to `done.md`
+  - Commit B: Image restructuring (`docs/img/`) + README logo path fix
+  - Commit C: README "Specs & Issue Tracking" section
+  - Commit E1: `.claude/skills/` files
+  - Commit E2: IAC paper PDF
+
+---
+
+## A-007: Add Python 3.14 Classifier
+
+```yaml
+ISSUE: A-007
+TYPE: TASK
+TITLE: Add Python 3.14 classifier to pyproject.toml
+STATUS: IN_PROGRESS
+ASSIGNEE: AI Agent (Sisyphus)
+PRIORITY: LOW
+RELATED_DOCS:
+  - pyproject.toml
+```
+
+**OBJECTIVE**:
+  - Add `Programming Language :: Python :: 3.14` trove classifier to `pyproject.toml`
+
+**CONTEXT**:
+  - Python 3.14 support should be declared in package metadata
+  - Single-line addition to the classifiers list
+
+**NEXT_ACTIONS**:
+  - Commit D: Add classifier line to `pyproject.toml`
 
 <!-- 
 Template for new issues:
