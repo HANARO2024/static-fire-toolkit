@@ -210,11 +210,43 @@ Agents MUST NOT introduce custom status values.
 
 ### Agent Behavior Rules
 
-- **To start new work**: Create or update an ISSUE block in `02_work/active.md`
-- **To extend existing work**: Preserve the ISSUE ID
-- **Upon completion**: Set `STATUS: DONE`, add `COMPLETED_AT` and `OUTPUT`, move to `02_work/done.md`
-
 Agents MUST NOT perform work without an associated ISSUE.
+
+#### Issue Lifecycle Process (MANDATORY)
+
+Agents MUST follow this process for **every non-trivial task**:
+
+**Step 1 — Check for Existing Issue**
+- Before starting any work, read `docs/02_work/active.md` to check if a relevant ISSUE already exists
+- If an existing ISSUE covers the work → use that ISSUE ID, do NOT create a new one
+
+**Step 2 — Create New Issue (if needed)**
+- If no existing ISSUE covers the work, **propose a new ISSUE ID and summary to the user and wait for confirmation before proceeding**
+- Only after user confirms: create the ISSUE block in `docs/02_work/active.md` with `STATUS: IN_PROGRESS`
+- Assign the next sequential `A-###` number (check `done.md` and `active.md` for the latest used ID)
+
+**Step 3 — Work with Issue Association**
+- All commits MUST reference the ISSUE ID in the commit message (e.g., `[A-005] docs: ...`)
+- To extend existing work: preserve the ISSUE ID
+- If scope changes significantly during work, inform the user and update the ISSUE block
+
+**Step 4 — Complete Issue**
+- When the work is done, **propose the status change to the user and wait for confirmation before proceeding**
+- Only after user confirms: set `STATUS: DONE`, add `COMPLETED_AT` and `OUTPUT` fields
+- Move the completed ISSUE block from `docs/02_work/active.md` to `docs/02_work/done.md`
+- Ensure `active.md` does not retain stale entries
+
+#### User Confirmation Requirement
+
+| Action | Requires User Confirmation |
+|--------|---------------------------|
+| Create new ISSUE | **YES** — propose ID + title, wait for approval |
+| Change STATUS to IN_PROGRESS | **YES** — confirm before starting |
+| Change STATUS to DONE | **YES** — confirm before closing |
+| Change STATUS to BLOCKED/WAITING | **YES** — explain reason, wait for approval |
+| Update ISSUE fields (objective, context) | No — minor updates are allowed without confirmation |
+
+Agents MUST NOT create or close issues autonomously. The user is the authority on issue lifecycle.
 
 ## Decision Log Rules
 
