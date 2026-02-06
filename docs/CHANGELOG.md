@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Zenodo DOI integration for academic citation
+- `CITATION.bib` and `CITATION.cff` citation files
+
+### References (for maintainers)
+- Decision: [D-2025-09-20-D](./01_log/decision-log.md#d-2025-09-20-d-zenodo-doi-assignment) (Zenodo DOI Assignment)
+
 ## [1.0.1] - 2025-09-20
 
 ### Fixed

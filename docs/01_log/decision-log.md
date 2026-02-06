@@ -706,6 +706,42 @@ DECISION_TYPE: ALGORITHM
 **REVIEW_TRIGGER**: If unstable combustion patterns become more varied than current window approach handles.
 
 
+## D-2026-01-11: TOML Configuration Migration
+
+---
+DECISION_ID: D-2026-01-11
+RELATED_ISSUES:
+  - P-002
+DECISION_TYPE: ARCHITECTURE
+---
+
+**DECISION**: Migrate `global_config.py` to `global_config.toml` format. Maintain `global_config.py` as deprecated legacy fallback for backward compatibility.
+
+**RATIONALE**:
+- Using a Python module (`.py`) as a configuration file conflates executable code with declarative data:
+  - Arbitrary code execution risk: a Python config file can import modules, run side effects, or contain logic errors that affect runtime behavior in unpredictable ways
+  - Blurs the boundary between "what the user configures" and "what the program does," making it harder for non-developer users to safely edit settings
+  - Static analysis tools and editors cannot validate Python config files against an expected schema
+- TOML provides clear separation between configuration data and application code:
+  - Human-readable and easy to edit without programming knowledge
+  - Deterministic parsing with no execution side effects
+  - Standard format with broad tooling support (PEP 680 added `tomllib` to Python 3.11 stdlib)
+- Current Python module format is technical debt inherited from early development (path dependency), identified since D-2025-09-16-B
+
+**ALTERNATIVES**:
+- Keep `global_config.py` as-is (rejected: conflates code and data, security concern, poor separation of concerns)
+- YAML (rejected: implicit typing pitfalls, less strict than TOML)
+- JSON (rejected: no comments, less human-friendly for manual editing)
+- INI/ConfigParser (rejected: limited type support, no nested structures)
+
+**REVIEW_TRIGGER**: If computed configuration values (e.g., gain calculations) prove difficult to express in TOML and require a more expressive format.
+
+**NOTES**:
+- Currently deferred (parking lot P-002); assign ISSUE ID when work begins
+- Must handle computed values (e.g., gain calculations) that currently use Python expressions
+- Backward compatibility with existing `global_config.py` users is mandatory during transition
+
+
 ## D-2026-01-19: Unified Agent Rules Document
 
 ---
