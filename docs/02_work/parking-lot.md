@@ -32,6 +32,7 @@ STATUS: TODO
 PRIORITY: HIGH
 RELATED_DECISIONS:
   - D-2025-09-16-B
+  - D-2026-01-11
 ---
 
 **OBJECTIVE**: Replace Python module configuration with TOML format.
