@@ -1,4 +1,4 @@
-![HANARO SFT Logo](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/docs/logo-banner.png)
+![HANARO SFT Logo](https://raw.githubusercontent.com/snu-hanaro/static-fire-toolkit/refs/heads/main/docs/img/logo-banner.png)
 
 [![License - MIT](https://img.shields.io/github/license/snu-hanaro/static-fire-toolkit)](https://github.com/snu-hanaro/static-fire-toolkit/blob/main/LICENSE)
 [![PyPI Version](https://img.shields.io/pypi/v/static-fire-toolkit)](https://pypi.org/project/static-fire-toolkit/)
