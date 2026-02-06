@@ -297,6 +297,18 @@ It compensates for the difference between local atmospheric pressure at test tim
 
 ## Development
 
+### Specs & Issue Tracking
+
+This project is document-first.
+
+Authoritative project records live under:
+- docs/context
+- docs/log
+- docs/work
+- docs/specs
+
+Do not treat these as auxiliary documentation.
+
 ### Tools used
 - Ruff: linting & formatting
 - pytest: testing
