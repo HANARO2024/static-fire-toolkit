@@ -142,6 +142,6 @@ data/_pressure_raw/   ──▶   results/pressure/     ──▶   (used by bur
 ## Key Design Decisions
 
 See `docs/01_log/decision-log.md` for rationale on:
-- D-2025-09-01: src-layout package structure
-- D-2025-09-01-B: Python-based configuration
-- D-2025-09-15: Sequential pipeline architecture
+- D-2024-12-29: Sequential pipeline architecture
+- D-2025-09-13-B: src-layout package structure
+- D-2025-09-16-B: Runtime config naming (`global_config.py`)
